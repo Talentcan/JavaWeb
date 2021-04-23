@@ -130,12 +130,150 @@ public @interface MyAnno {
 @Repeatable ：可重复的意思，是java1.8加进来的一个新特性，通常是注解的值可以同时取多个
 
 
+## 在程序使用注解
+获取注解中定义的属性值，如：在上一反射案例中，使用了配置文件来获取信息，可以用注解来替代配置文件
 
+1.获取注解定义的位置的对象，可能是class，method，field对象，都有getAnnotation()方法
+2.获取指定的注解，如：getAnnotation(Class)获取类的注解
+3.调用注解中的抽象方法获取配置的属性值
+```
+@Target({ElementType.TYPE,ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface pro {
+    String className();
+    String methodName();
+}
 
+public class Demo1 {
+    public void show(){
+        System.out.println("demo1...");
+    }
+}
 
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Properties;
 
+@pro(className = "Annotation.Demo1",methodName = "show")
+public class ReflectTest{
+    public static void main(String[] args) throws Exception {
+        //1.解析注解
+        //1.1获取该类的字节码文件对象
+        Class<ReflectTest> reflectTestClass = ReflectTest.class;
+        //2.获取上面的注解对象
+        //为什么注解对象可以直接调用方法
+        //其实就是在内存中生成了一个该注解接口的子类实现对象
+        /*
+        * 相当于在内存中写了一个类
+        * public class ProImpl implements pro{
+        *   public String className(){
+        *       return "Annotation.Demo1";  //返回值
+        *   }
+        *
+        *   public String methodName(){
+        *       return "show";
+        *   }
+        * }
+        * */
+        pro annotation = reflectTestClass.getAnnotation(pro.class);
+        //3.调用注解对象中定义的抽象方法，获取返回值
+        String classname =  annotation.className();
+        String methodName = annotation.methodName();
+        System.out.println(classname);
+        System.out.println(methodName);
 
+        //4.加载该类进内存
+        Class cls = Class.forName(classname);
+        //5.创建对象
+        Object obj = cls.newInstance();
+        //6.获取方法对象
+        Method method = cls.getMethod(methodName);
+        //7.执行方法
+        method.invoke(obj);
+    }
+```
 
+## 案例
+有一个计算器类，用注解测试有没有bug，并生成错误文档
+```
+//定义计算类
+public class Calculator {
 
+    @Check
+    public void add(){
+        String s = null;
+        s.toString();
+        System.out.println("1+0=" + (1+0));
+    }
+    @Check
+    public void sub(){
+        System.out.println("1-0=" + (1-0));
+    }
+    @Check
+    public void mul(){
+        System.out.println("1*0=" + (1*0));
+    }
+    @Check
+    public void div(){
+        System.out.println("1/0=" + (1/0));
+    }
 
+    public void show(){
+        System.out.println("没有bug");
+    }
+}
 
+//自定义注解
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Check {
+}
+
+//写测试注解
+//简单的测试方法
+//当主方法执行，会自动检测所有方法（加了注解的方法），判断是否有异常，并记录到文件中
+public class CheckTest {
+    public static void main(String[] args) throws IOException {
+        //1.创建计算器对象
+        Calculator c = new Calculator();
+        //2.获取字节码文件对象
+        Class cls = c.getClass();
+        //3.获取所有方法
+        Method[] methods = cls.getMethods();
+        int count = 0; //出现异常的次数
+        //将异常写入文件中
+        BufferedWriter bw = new BufferedWriter(new FileWriter("bug.txt"));
+        //4.遍历并判断方法上是否有check注解
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Check.class)){
+                //5.有就执行注解
+                try{
+                    method.invoke(c);
+                }catch (Exception e){
+                    //6.捕获异常
+
+                    //7.记录到文件中
+                    count++;
+                    bw.write(method.getName() + "方法出现异常");
+                    bw.newLine();
+                    bw.write("异常名称" + e.getCause().getClass().getSimpleName());
+                    bw.newLine();
+                    bw.write("异常原因" + e.getCause().getMessage());
+                    bw.newLine();
+                    bw.write("------------------------------------------------------------");
+                    bw.newLine();
+                }
+
+            }
+        }
+        bw.write("本次一共出现了" + count + "次异常");
+        bw.flush();
+        bw.close();
+    }
+}
+```
+
+## 总结
+1.以后大多数时候，我们会使用注解，而不是自定义注解
+2.注解是给编译器和解析程序用，如testCheck
+3.注解并不是程序的一部分，可以理解为一个标签
