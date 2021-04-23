@@ -16,7 +16,7 @@
 ## 获取class类对象的方式
 要了解反射，要先对反射的常用对象有基本了解。
 
-Class：class类的实例表示正在运行的java应用程序中的类和接口
+Class：class类是用来描述所有字节码文件（物理文件）的共同的一些特征和行为，class类的实例表示正在运行的java应用程序中的类和接口
 
 constructor：关于类的构造方法信息以及对它的访问权限
 
@@ -181,7 +181,7 @@ public static void main(String[] args) throws Exception {
         //classloder 是类加载器，将字节码文件加载进内存
         ClassLoader classLoader =  ReflectTest.class.getClassLoader();
         InputStream is = classLoader.getResourceAsStream("pro.properties");
-        pro.load(is);
+        pro.load(is); //从字节输入流中读取键值对
 
         //2.获取配置文件中定义的数据
         String classname = pro.getProperty("className");
