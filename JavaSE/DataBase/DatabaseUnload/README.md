@@ -23,7 +23,11 @@ HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Services/Eventlog/Application/MySQL�
 或者
 
 1.在MySQL的安装目录中找到my.ini配置文件
+
 2.如果没有修改过，那么在这个文件中找到 datadir="C/ProgramData/MySQL/MySQL Server 5.5/Data/" ，然后复制下来
+
 3.控制面板--->程序卸载--->MySQL--->右键卸载
+
 //现在还没有删除成功，现在用到我们刚刚复制的东西，那个是数据目录，在那个路径下存放着MySQL的数据文件，如果这个文件没有删除，再次安装也不会成功
+
 4.在C/ProgramData路径下删除MySQL，这个文件夹是隐藏的，可以搜索或者显示影藏文件来找到
