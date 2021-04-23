@@ -178,6 +178,7 @@ public static void main(String[] args) throws Exception {
         Properties pro = new Properties();
         //1.2加载配置文件，转换为一个map集合
         //1.2.1获取class目录下的配置文件
+        //classloder 是类加载器，将字节码文件加载进内存
         ClassLoader classLoader =  ReflectTest.class.getClassLoader();
         InputStream is = classLoader.getResourceAsStream("pro.properties");
         pro.load(is);
