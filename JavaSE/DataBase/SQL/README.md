@@ -23,13 +23,12 @@
 4.DCL：数据控制语言，用来定义数据库的访问权限和安全级别，及创建用户，关键字：GRANT,REVOKE等
 
 ## DDL：操作数据库，表
-1.操作数据库：CRUD</br>
-(1).C(Create)：创建</br>
-(2).R(Retrieve)：查询</br>
-  1
-(3).U(Update)：修改</br>
-(4).D(Delete)：删除</br>
-(5).使用数据库</br>
+1.操作数据库：CRUD  
+(1).C(Create)：创建  
+(2).R(Retrieve)：查询  
+(3).U(Update)：修改  
+(4).D(Delete)：删除  
+(5).使用数据库  
 
 
 
