@@ -55,19 +55,52 @@
 
 ### 操作表
 1.C(Create)：创建  
-  - 创建表
+  - 语法：create table 表名(列名1 数据类型,列名2 数据类型,列名3 数据类型),  最后一行的列不用加逗号  
+  - 数据类型
+    - int 整数类型 age int
+    - double 小数类型 score double(5,2) 表示总的有5位，小数有两位，如999.99
+    - date 日期类型 只包含年月日 yyyy-MM-dd
+    - datetime 日期类型 包含年月日时分秒 yyyy-MM-dd HH:mm:ss
+    - timestamp 时间戳类型 包含年月日时分秒 yyyy-MM-dd HH:mm:ss，如果将来不给这个字段赋值或赋值为null，则默认使用当前的系统时间来自动赋值
+    - varchar 字符串类型 name varchar（20）表示最大20个字符
+```ruby
+-- 创建一张学生表
+create table student(
+  id int,
+  name varchar(32),
+  age int,
+  score double(4,1),
+  birthday date,
+  insert_time timestamp
+  );
+```
+  - 复制一张表：create table 新表名 like 想要复制的表;
+    - 如：create table stu like student;
 
 2.R(Retrieve)：查询  
   - 查询某个数据库中所有的名称
     - show tables;
   - 查询表结构
     - desc 表名;
+  - 查询表的字符集
+    - show create table 表名;
 
 3.U(Update)：修改  
-
+  - 修改表名
+    - alter table 表名 rename to 新的表名;
+  - 修改表的字符集
+    - alter table 表名 character set 字符集名称;
+  - 添加一列
+    - alter table 表名 add 列名 数据类型;
+  - 修改列的名称和类型
+    - alter table 表名 change 列名 新列名 新数据类型; --可以修改列的名称和类型
+    - alter table 表名 modify 列名 新数据类型; --只能修改类的数据类型
+  - 删除列
+    - alter table 表名 drop 列名; 
 
 4.D(Delete)：删除   
-
+  - drop table 表名;
+  - drop table if exists 表名;
 
 
 
