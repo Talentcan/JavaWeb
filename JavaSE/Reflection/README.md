@@ -36,7 +36,7 @@ method：提供关于类或接口上单独某个方法的信息
   
 3.对象. getClass(); 在java代码的第三个阶段，getClass()方法在Object类中定义着。多用于对象的获取字节码的方式
   
-```
+```ruby
 public static void main(String[] args) throws Exception {
         //1.class.forName("全类名");
         Class cls1 = Class.forName("cn.reflect.Person");
@@ -95,7 +95,7 @@ Method[] getDeclaredMethods()
 忽略访问权限修饰符的安全检查： setAccessible(true) 暴力反射
 
 如
-```
+```ruby
 //获取所有public修饰的成员变量
 Field [] fields = personClass.getFields();
 //获取指定名称的public的成员变量
@@ -118,7 +118,7 @@ System.out.println(value1);
 创建对象： TnewInstance(Object... initargs)；如果使用空参数构造方法创建对象，操作可以简化：class对象的newInstance方法
 
 如
-```
+```ruby
 Constructor cons = personClass.getConstructor(String.class,int.class);
 System.out.println(cons);
 //创建对象
@@ -136,7 +136,7 @@ System.out.println(o);
 执行方法：Object invoke (Object obj,Object... args)
 
 如
-```
+```ruby
 //获取指定名称的方法
 Method eat_method = personClass.getMethod("eat");
 Person p = new Person();
@@ -169,7 +169,7 @@ eat_method.invoke(p);
 5.执行方法
 
 代码
-```
+```ruby
 //配置文件，需要用到什么类，就修改配置文件
 //类的名字要是全类名，从包开始
 className=cn.reflect.Student
