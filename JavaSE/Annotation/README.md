@@ -83,7 +83,7 @@ public class Worker{
 元注解：用于描述注解的注解，或者说元注解是一种基本注解，它能应用到其他的注解上面，java已经帮我们定义好了，我们可以用来注解我们自定义的注解
 
 @Taret：描述注解能够作用的位置
-```
+```ruby
 在@Target注解中传递ElementType枚举数组
 ElementType的取值：
 TYPE：可以作用于类上
@@ -107,7 +107,7 @@ public class Worker {
 }
 ```
 @Retention：描述注解被保留的阶段，说明这个注解的存活时间
-```
+```ruby
 它的取值如下：
 RetentionPolicy.SOURCE 注解只在源码阶段保留，在编译器进行编译时它将被丢弃忽视
 RetentionPolicy.CLASS 注解只被保留到编译进行的时候，它并不会被加载到 JVM 中
