@@ -23,13 +23,13 @@
 4.DCL：数据控制语言，用来定义数据库的访问权限和安全级别，及创建用户，关键字：GRANT,REVOKE等
 
 ## DDL：操作数据库，表
-操作数据库：CRUD  
+### 操作数据库：CRUD  
 1.C(Create)：创建  
   - 创建数据库:  
-    - create database 数据库名称  
+    - create database 数据库名称;  
   - 创建数据库，判断是否存在，并指定字符集  
     - create database if not exists 数据库名称 character set 指定的字符集;  
-    - create database if not exists db2 character set gbk;  
+    - 如：create database if not exists db2 character set gbk;  
 
 2.R(Retrieve)：查询  
   - 查询所有数据库的名称  
@@ -38,10 +38,48 @@
     - show create database mysql;  
 
 3.U(Update)：修改  
+  - 修改数据库的字符集  
+    - alter database 数据库名称 character set 字符集名称;  
+    - 如：alter database db2 character set utf8;  
 
-4.D(Delete)：删除  
+4.D(Delete)：删除   
+  - 删除数据库  
+    - drop database if exists 数据库名称;  
 
 5.使用数据库  
+  - 查询当前正在使用的数据库名称  
+    - select database();  
+  - 使用数据库  
+    - use 数据库名称;  
+
+
+### 操作表
+1.C(Create)：创建  
+  - 创建表
+
+2.R(Retrieve)：查询  
+  - 查询某个数据库中所有的名称
+    - show tables;
+  - 查询表结构
+    - desc 表名;
+
+3.U(Update)：修改  
+
+
+4.D(Delete)：删除   
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
