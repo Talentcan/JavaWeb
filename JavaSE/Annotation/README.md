@@ -32,7 +32,7 @@ public void show2(){
 ```
 
 @SuppressWarnings用来压制警告,一般传递参数all
-```
+```ruby
 //用来压制编辑器产生的警告
 @SuppressWarnings("all")  //压制所有警告，all
 public Class a(){
