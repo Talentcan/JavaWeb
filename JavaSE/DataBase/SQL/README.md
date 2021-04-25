@@ -102,11 +102,96 @@ create table student(
   - drop table 表名;
   - drop table if exists 表名;
 
+## DML增删改表中的数据
+1.添加数据  
+  - 语法
+    - insert into 表名(列名1,列名2,...列名n) values(数据1,数据2,...数据n);
+  - 注意
+    - 列名和值一一对应（名字和类型）
+    - 如果表名后不定义列名，则默认为给所有列添加值
+    - 除了数字类型，其他类型需要用引号(""/'')引起来
 
+2.删除数据  
+  - 语法
+    - delect from 表名 where 条件;
+  - 注意
+    - 如果不加条件，则删除表中所有记录
+    - 如果要删除所有记录，可以使用 delete from 表名; -- 不推荐使用，这个操作是有多少条记录就会执行多少次删除操作，效率不高；可以使用TRUNCATE TABLE 表名; -- 这个操作是先删除表，然后再创建一个一模一样的空表
 
+3.修改数据  
+  - 语法
+    - update 表名 set 列名1=值1, 列名2=值2, ... 列名n=值n where 条件;
+  - 注意
+    - 如果不加任何条件，则会将表中所有记录全部修改
 
+## DQL：查询表中的记录
+select * from 表名;
 
+1.语法
+```ruby
+select 
+  字段列表
+from 
+  表名列表 
+where 
+  条件列表
+group by 
+  分组字段
+having 
+  分组之后的条件限定
+order by 
+  排序
+limit 
+  分页限定
+```
+2.基础查询
+```ruby
+-- 用下面的SQL语句创建的表为例
+CREATE TABLE stu(
+	id int, -- 编号
+	name VARCHAR(20), -- 姓名
+  age int, -- 年龄
+  sex VARCHAR(5), -- 性别
+  address VARCHAR(100), -- 地址
+  math int, -- 数学
+  english int -- 英语
+);
 
+INSERT INTO stu 
+(id,name,age,sex,address,math,english) VALUES 
+(1,"托儿索",5,'男',"符文大陆",20,80),
+(2,"小学僧",6,'男',"符文大陆",30,30),
+(3,"儿童劫",6,'男',"符文大陆",50,null),
+(4,"望远烬",8,'男',"未知",60,45);
+```
+1.多个字段的查询  
+```ruby
+-- 标准写法
+-- 查询表中的姓名和年龄
+SELECT 
+		name, -- 姓名
+		age -- 年龄
+from 
+		stu;
+```
+2.去除重复
+```ruby
+-- 只有查询出来的结果集完全一样，才能去除
+-- 查询不同的地址，用distinct
+SELECT DISTINCT address from stu;
+```
+3.计算列
+```
+-- 计算数学和英语之和
+SELECT name,math,english , math + english from stu; -- 如果在运算过程中有null参与运算，计算结果会都为null
+SELECT name,math,english , math + IFNULL(english,0) from stu;  -- 用ifnull修改，如果为null，改为0
+```
+4.起别名
+```
+-- 将上面求出的数学和英语之和的列表名叫做总分
+-- 用as
+SELECT name,math,english , math + IFNULL(english,0) as 总分 from stu;
+```
 
 
 
