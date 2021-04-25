@@ -148,8 +148,8 @@ limit
 ```ruby
 -- 用下面的SQL语句创建的表为例
 CREATE TABLE stu(
-	id int, -- 编号
-	name VARCHAR(20), -- 姓名
+  id int, -- 编号
+  name VARCHAR(20), -- 姓名
   age int, -- 年龄
   sex VARCHAR(5), -- 性别
   address VARCHAR(100), -- 地址
