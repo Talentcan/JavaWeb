@@ -25,16 +25,16 @@
 ## DDL：操作数据库，表
 操作数据库：CRUD  
 1.C(Create)：创建  
-  _ 创建数据库:  
-    _ create database 数据库名称  
-  _ 创建数据库，判断是否存在，并指定字符集  
-    _ create database if not exists 数据库名称 character set 指定的字符集;  
-    _ create database if not exists db2 character set gbk;  
+  - 创建数据库:  
+    - create database 数据库名称  
+  - 创建数据库，判断是否存在，并指定字符集  
+    - create database if not exists 数据库名称 character set 指定的字符集;  
+    - create database if not exists db2 character set gbk;  
 2.R(Retrieve)：查询  
-  _ 查询所有数据库的名称  
-    _ show databases;  
-  _ 查询某个数据库的字符集：查询某个数据库的创建语句  
-    _ show create database mysql;  
+  - 查询所有数据库的名称  
+    - show databases;  
+  - 查询某个数据库的字符集：查询某个数据库的创建语句  
+    - show create database mysql;  
 3.U(Update)：修改  
 4.D(Delete)：删除  
 5.使用数据库  
