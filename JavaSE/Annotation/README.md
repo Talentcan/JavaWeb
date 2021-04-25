@@ -13,14 +13,14 @@ JDK1.5之后的新特性；是用来说明程序的；使用注解：@注解名�
 
 ## JDK中预定义的一些注解
 @Override:检测被该注解标注的方法是否是继承自父类（接口）的
-```
+```ruby
 //看方法声明是否跟父类的方法一致，不一样会失败报错，如果不加这个注解，表示是这个类特有的方法，不构成重写
 @Override
 public String toString(){
 }
 ```
 @Deprecated：检测该注解标注的内容，表示时候已过时
-```
+```ruby
 //虽然过时，也不推荐使用，但是还是能用
 @Deprecated
 public void show1(){
@@ -63,7 +63,7 @@ String</br>
 (1).如果定义属性时，使用default关键字给属性默认初始化值，则使用注解时，可以不进行属性的赋值
 (2).如果只有一个属性需要赋值，并且属性的名称是value，则value可以省略，直接定义值即可，如：JDK中@SuppressWarnings("all")只有一个属性，且名称为value的字符串数组
 (3). 数组赋值时，值使用{}包裹，如果数组中只有一个值，则可以省略{}。
-```
+```ruby
 public @interface MyAnno {
     int age ();
     String name() default "zhangsan";
@@ -136,7 +136,7 @@ public @interface MyAnno {
 1.获取注解定义的位置的对象，可能是class，method，field对象，都有getAnnotation()方法
 2.获取指定的注解，如：getAnnotation(Class)获取类的注解
 3.调用注解中的抽象方法获取配置的属性值
-```
+```ruby
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface pro {
@@ -195,7 +195,7 @@ public class ReflectTest{
 
 ## 案例
 有一个计算器类，用注解测试有没有bug，并生成错误文档
-```
+```ruby
 //定义计算类
 public class Calculator {
 
