@@ -181,13 +181,13 @@ from
 SELECT DISTINCT address from stu;
 ```
 3.计算列
-```
+```ruby
 -- 计算数学和英语之和
 SELECT name,math,english , math + english from stu; -- 如果在运算过程中有null参与运算，计算结果会都为null
 SELECT name,math,english , math + IFNULL(english,0) from stu;  -- 用ifnull修改，如果为null，改为0
 ```
 4.起别名
-```
+```ruby
 -- 将上面求出的数学和英语之和的列表名叫做总分
 -- 用as
 SELECT name,math,english , math + IFNULL(english,0) as 总分 from stu;
