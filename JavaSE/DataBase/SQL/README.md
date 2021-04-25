@@ -169,10 +169,10 @@ INSERT INTO stu
 -- 标准写法
 -- 查询表中的姓名和年龄
 SELECT 
-		name, -- 姓名
-		age -- 年龄
+  name, -- 姓名
+  age -- 年龄
 from 
-		stu;
+  stu;
 ```
 (2).去除重复
 ```ruby
