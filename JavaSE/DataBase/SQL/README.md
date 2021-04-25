@@ -164,7 +164,7 @@ INSERT INTO stu
 (3,"儿童劫",6,'男',"符文大陆",50,null),
 (4,"望远烬",8,'男',"未知",60,45);
 ```
-1.多个字段的查询  
+(1).多个字段的查询  
 ```ruby
 -- 标准写法
 -- 查询表中的姓名和年龄
@@ -174,30 +174,88 @@ SELECT
 from 
 		stu;
 ```
-2.去除重复
+(2).去除重复
 ```ruby
 -- 只有查询出来的结果集完全一样，才能去除
 -- 查询不同的地址，用distinct
 SELECT DISTINCT address from stu;
 ```
-3.计算列
+(3).计算列
 ```ruby
 -- 计算数学和英语之和
 SELECT name,math,english , math + english from stu; -- 如果在运算过程中有null参与运算，计算结果会都为null
 SELECT name,math,english , math + IFNULL(english,0) from stu;  -- 用ifnull修改，如果为null，改为0
 ```
-4.起别名
+(4).起别名
 ```ruby
 -- 将上面求出的数学和英语之和的列表名叫做总分
 -- 用as
 SELECT name,math,english , math + IFNULL(english,0) as 总分 from stu;
+-- 不用as，用一个或多个空格也可以实现
+SELECT name,math,english , math + IFNULL(english,0)   总分 from stu;
+```
+3.条件查询
+(1).where字句后跟条件
+(2).运算符
+```
+!= 、 < 、 > 、 <= 、 >= 、 = 、 <>
+between ... and
+in(集合) --在这个集合中出现的
+like  -- 模糊查询
+  占位符：_:表示单个字符；%_:表示零个或多个字符
+is null
+and 或 &&
+or 或 ||
+not 或 !
+```
+4.排序查询
+  - 语法：order by 子句
+    - order by 排序字段1 排序方式1 ， 排序字段2 排序字段2 ....
+    - 如果有多个排序条件，则当前边的条件值一样时，才会判断后面的条件
+  - 排序方式
+    - ASC：升序，默认的
+    - DESC：降序
+```ruby
+-- 先按数学降序排序，然后在按英语降序排序
+select * from stu ORDER BY math DESC , english DESC;
+```
+5.聚合函数：将一列数据作为一个整体，进行纵向的计算
+```ruby
+-- 1.count：计算个数
+SELECT COUNT(id) from stu;  -- 4
+SELECT COUNT(english) from stu;  -- 3 聚合函数的计算，会排除null值
+-- 解决排除null值后，个数不准确的方法，一般选择主键，或直接用*（只要一行中有一个数据不为空，就算一列）
+SELECT COUNT(ifnull(english,0)) from stu;
+SELECT COUNT(*) from stu;
+
+-- 2.max/min：计算最大/最小
+SELECT max(english) from stu;
+SELECT min(IFNULL(english,0)) from stu;
+
+-- 3.sum：计算和
+SELECT sum(english) from stu;
+
+-- 4.avg：计算平均値
+SELECT avg(IFNULL(english,0)) from stu;
+
+-- 注意：聚合函数的计算，会排除null值
+-- 解决方案：用ifnull解决，或选择不包含非空的列进行计算，主键
 ```
 
-
-
-
-
-
-
+6.分组查询：统计一个具有相同特征的某一类数据，把这些数据当做一个整体来看一些整体的信息
+  - 语法：group by 分组字段;
+  - 注意
+    - 分组之后查询的字段只能为分组字段或聚合函数，其他字段没有意义
+    - where和having的区别：1.where在分组之前进行限定，如果不满足条件，则不参与分组；having在分组之后进行限定，如果不满足结果，则不会被查询出来；2.where后不可以跟聚合函数，having可以进行聚合函数的判断
+```ruby
+-- 按年龄分组，分别查询每个年级的人的数学平均分和人数
+SELECT age,AVG(math),COUNT(id)  人数 from stu GROUP BY age;
+-- 按年龄分组，分别查询每个年级的人的数学平均分和人数，分数低于70分的人，不参与分组
+SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age;
+-- 按年龄分组，分别查询每个年级的人的数学平均分和人数，分数低于70分的人，不参与分组，并且分组的人数>=2
+SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age having count(id) >=2;
+SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age having 人数 >=2;
+```
+7.分页查询
 
 
