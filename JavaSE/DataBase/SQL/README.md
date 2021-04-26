@@ -35,7 +35,7 @@
   - 查询所有数据库的名称  
     - show databases;  
   - 查询某个数据库的字符集：查询某个数据库的创建语句  
-    - show create database mysql;  
+    - show create database 数据库名称;  
 
 3.U(Update)：修改  
   - 修改数据库的字符集  
