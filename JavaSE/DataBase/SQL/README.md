@@ -257,5 +257,13 @@ SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age hav
 SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age having 人数 >=2;
 ```
 7.分页查询
-
-
+  - 语法：limit 开始的索引,每页查询的条数;
+  - 公式：开始的索引=（当前的页码-1）*每页显示的条数
+  - 在MySQL中分页操作的语法limit是一个"方言",只能在MySQL中使用，别的数据库的分页操作有自己独特的语法
+```
+-- 每页显示2条记录
+SELECT * from stu LIMIT 0,2; -- 第1页
+SELECT * from stu LIMIT 2,2; -- 第2页，第一个2表示从第二条数据开始，这个值可以用公式计算出来
+```
+## 约束
+概念：对表中的数据进行限定，保证数据的正确性、有效性和完整性。
