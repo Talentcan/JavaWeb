@@ -194,8 +194,8 @@ SELECT name,math,english , math + IFNULL(english,0) as 总分 from stu;
 -- 不用as，用一个或多个空格也可以实现
 SELECT name,math,english , math + IFNULL(english,0)   总分 from stu;
 ```
-3.条件查询
-(1).where字句后跟条件
+3.条件查询  
+(1).where字句后跟条件  
 (2).运算符
 ```
 != 、 < 、 > 、 <= 、 >= 、 = 、 <>
@@ -248,11 +248,11 @@ SELECT avg(IFNULL(english,0)) from stu;
     - 分组之后查询的字段只能为分组字段或聚合函数，其他字段没有意义
     - where和having的区别：1.where在分组之前进行限定，如果不满足条件，则不参与分组；having在分组之后进行限定，如果不满足结果，则不会被查询出来；2.where后不可以跟聚合函数，having可以进行聚合函数的判断
 ```ruby
--- 按年龄分组，分别查询每个年级的人的数学平均分和人数
+-- 按年龄分组，分别查询每个年龄的人的数学平均分和人数
 SELECT age,AVG(math),COUNT(id)  人数 from stu GROUP BY age;
--- 按年龄分组，分别查询每个年级的人的数学平均分和人数，分数低于70分的人，不参与分组
+-- 按年龄分组，分别查询每个年龄的人的数学平均分和人数，分数低于20分的人，不参与分组
 SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age;
--- 按年龄分组，分别查询每个年级的人的数学平均分和人数，分数低于70分的人，不参与分组，并且分组的人数>=2
+-- 按年龄分组，分别查询每个年龄的人的数学平均分和人数，分数低于20分的人，不参与分组，并且分组的人数>=2
 SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age having count(id) >=2;
 SELECT age,AVG(math),COUNT(id)  人数 from stu where math > 20 GROUP BY age having 人数 >=2;
 ```
@@ -266,4 +266,118 @@ SELECT * from stu LIMIT 0,2; -- 第1页
 SELECT * from stu LIMIT 2,2; -- 第2页，第一个2表示从第二条数据开始，这个值可以用公式计算出来
 ```
 ## 约束
-概念：对表中的数据进行限定，保证数据的正确性、有效性和完整性。
+概念：对表中的数据进行限定，保证数据的正确性、有效性和完整性。  
+分类  
+1.主键约束：primary key  
+  - 注意
+    - 含义：非空且唯一
+    - 一张表只能有一个字段为主键
+    - 主键就是表中记录的唯一标识
+  - 在创建表时，添加主键约束
+  ```
+  create table stu(
+    id int primary key, -- 给id添加主键约束
+    name varchar(20);
+  );
+  ```
+  - 创建表后，添加主键约束
+  ```
+  alter table stu modify id int primary key;
+  ```
+  - 删除主键约束
+  ```
+  -- 不能直接修改列的属性
+  alter table stu drop primary key;
+  ```
+  - 自动增长：一般跟主键一起使用
+    - 概念：如果某一列是数值类型的，使用auto-increment可以来完成值的自动增长
+    - 在创建表时，添加主键约束并完成自动增长
+    ```
+    create table stu(
+      id int primary key auto-increment, -- 给id添加主键约束,并实现自动增长
+      name varchar(20);
+    );
+    -- 假如表中有(1,a),现在添加数据(null,b),在表中成为(1,a)(2,b),再添加(5,c),表中数据(1,a)(2,b)(5,c),此时再添加数据(null,d)，数据变成(1,a)(2,b)(5,c)(6,d),说明自动增长的值只与前一个数据有关
+    ```
+    - 表创建好后，添加自动增长
+    ```
+    alter table stu modify id int primary key auto-increment;
+    ```
+    - 删除自动增长
+    ```
+    alter table stu modify id int; -- 这样删不掉主键，可以删掉自动增长
+    ```
+
+2.非空约束：not null,某一列的值不能为null  
+  - 创建表时添加非空约束
+  ```
+  create table stu (
+    id int,
+    name varchar(20) not null -- name为非空
+  );
+  ```
+  - 删除非空约束
+  ```
+  -- 修改列的属性
+  ALTER TABLE stu MODIFY name VARCHAR(20);
+  ```
+  - 创建表结束后，添加非空约束
+  ```
+  ALTER TABLE stu MODIFY name VARCHAR(20) not full;
+  ```
+
+3.唯一约束：unique，某一列的值不能重复  
+  - 在创建表时，添加唯一约束
+  ```
+  create table stu (
+    id int,
+    phone_number VARCHAR(20) UNIQUE  -- 手机号为空
+  );
+  ```
+  - 在创建表后，添加唯一约束
+  ```
+  ALTER TABLE stu MODIFY phone_number VARCHAR(20) UNIQUE;
+  ```
+  - 删除唯一约束
+  ```
+  -- 不可以像非空约束一样，直接修改列的属性
+  alter table stu drop index phone_number;
+  ```
+  - 注意
+    - 唯一约束可以有null值，但是只能有一条记录为null
+
+4.外键约束：foreign key  
+一些表中有许多重复的数据，叫做数据冗余
+  - 在创建表时，添加外键约束
+  ```
+  -- 语法
+  create table 表名(
+    ... -- 一些列
+    外键列 constraint 外键名称 foreign key 外键列的名称 
+  );
+  ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
