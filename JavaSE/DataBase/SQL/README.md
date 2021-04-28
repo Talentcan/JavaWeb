@@ -456,7 +456,6 @@ SELECT * from stu LIMIT 2,2; -- 第2页，第一个2表示从第二条数据开�
 
 多表查询练习
 ```ruby
--- 使用下面的数据
 -- 部门表
 create table dept (
   id int primary key,  -- 部门id
@@ -500,17 +499,17 @@ create table emp (
 );
 
 -- 添加员工
-INSERT INTO emp(id, ename,job_id,mgr,joindate,salary,bonus,dept_id) VALUES
+INSERT INTO emp(id,ename,job_id,mgr,joindate,salary,bonus,dept_id) VALUES
 (1001,'孙悟空',4,1004,'2000-12-17','8000.00',NULL,20),
 (1002,'卢俊义',3,1006,'2001-02-20','16000.00','3000.00',30),
 (1003,'林冲',3,1006,'2001-02-22','12500.00','5000.00',30),
-(1004,'唐僧",2,1009,'2001-04-02','29750.00',NULL,20),
+(1004,'唐僧',2,1009,'2001-04-02','29750.00',null,20),
 (1005,'李逵',4,1006,'2001-09-28','12500.00','14000.00',30),
-(1006,'宋江',2,1009,'2001-05-01',128500.00’,NULL,30),
-(1007,'刘备',2,1009,'2001-09-01','24500.00',NULL,10),
-(1008,'猪八戒',4,1004,'2007-04-19','30000.00',NULL,20),
-(1009,'罗贯中',1,NULL,'2001-11-17','50000.00',NULL,10),
-(1010，,吴用',3,1006,'2001-09-08','15000.00','0.00',30),
+(1008,"猪八戒",4,1004,'2007-04-19','30000.00',NULL,20),
+(1009,"罗贯中",1,NULL,'2001-11-17','50000.00',NULL,10),
+(1006,'宋江',2,1009,'2001-05-01','12850.00',NULL,30),
+(1007,"刘备",2,1009,'2001-09-01','24500.00',NULL,10),
+(1010,'吴用',3,1006,'2001-09-08','15000.00','0.00',30),
 (1011,'沙僧',4,1004,'2007-05-23','11000.00',NULL,20),
 (1012,'李逵',4,1006,'2001-12-03','9500.00',NULL,30),
 (1013,'小白龙',4,1004,'2001-12-03','30000.00',NULL,20),
@@ -520,7 +519,7 @@ INSERT INTO emp(id, ename,job_id,mgr,joindate,salary,bonus,dept_id) VALUES
 create table salarygrade (
   grade int primary key,
   losalary int,
-  hisalary int,
+  hisalary int
 );
 
 -- 添加数据
@@ -531,8 +530,59 @@ insert into salarygrade(grade,losalary,hisalary) values
 (4,20100,30000),
 (5,30100,99999);
 ```
- 
+需求  
+ 1.查询所有员工信息，查询员工编号，员工姓名，工资，职务名称，职务描述  
+ ```ruby
+SELECT emp.id,ename,salary,jname,description 
+from emp,job 
+where emp.job_id = job.id;
+ ```
+ 2.查询员工编号，员工姓名，工资，职务名称，职务描述，部门名称，部门位置  
+ ```ruby
+SELECT 
+	emp.id , ename , salary , jname , description , dept.dname , loc
+from 
+	emp,job,dept
+where 
+	emp.job_id = job.id and emp.dept_id = dept.id;
+ ```
+ 3.查询员工姓名，工资，工资等级  
+ ```ruby
+SELECT ename,salary,grade
+from emp,salarygrade
+where salary>=losalary and salary<=hisalary;
+ ```
+ 4.查询员工姓名，工资，职务名称，职务描述，部门名称，部门位置，工资等级  
+ ```ruby
+select ename,salary,jname,description,dname,loc,grade
+from emp,job,dept,salarygrade
+where emp.job_id = job.id and emp.dept_id = dept.id and salary>=losalary and salary<=hisalary;
+ ```
+ 5.查询出部门编号，部门名称，部门位置，部门人数  
+ ```ruby
+select t1.id,dname,loc,部门人数
+from dept t1 ,(SELECT *, COUNT(emp.id) 部门人数 from emp GROUP BY dept_id) t2
+where t1.id = t2.dept_id;
+ ```
+ 6.查询所有员工的姓名及其直接上级的姓名，没有领导的员工也需要查询  
+```ruby
+分析：
+1.姓名信息在emp表，直接上级信息也在emp表，所以emp表中的id和mgr是自关联
+2.可以设置emp.id=emp.mgr，到这里只能查询一部分数据，如果上级领导为空，则数据显示不会完全
+3.通过使用左外连接来查询，左外连接可以查询所有左表数据和交集数据
 
+到第二步的代码：
+-- 不会显示所有数据，有一条数据不在
+select t1.ename,t1.mgr,t2.id,t2.ename 上级领导
+from emp t1 , emp t2
+where t1.mgr = t2.id;
+
+-- 完全代码:
+select t1.ename,t1.mgr,t2.id,t2.ename 上级领导
+from emp t1
+left join emp t2
+on t1.mgr = t2.id;
+```
 
 
 
