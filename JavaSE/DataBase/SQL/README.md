@@ -591,8 +591,20 @@ on t1.mgr = t2.id;
   * 删除用户
     * 语法：drop user '用户名'@'主机名'; 
   * 修改用户密码
+    * 语法：update user set password = password('新密码') where user = '用户名';  password()函数的功能是用来给密码加密的
+    * 语法：set password for '用户名'@'主机名' = password('新密码');  DCL特有的方式
+    * 如果在mysql中忘记root用户的密码
+      * 1.cmd--->net stop mysql(普通的cmd不行，要用管理员省份打开cmd才可以)
+      * 2.使用无验证方式启动mysql服务：mysql --skip-grant-tables
+      * 3.打开新的cmd窗口，直接输入mysql，就可以密码登录mysql
+      * 4.use mysql;
+      * 5.update user set password = password('新密码') where user = 'root';
+      * 6.关闭两个窗口
+      * 7.打开任务管理器，手动结束mysqld.exe的进程
+      * 8.启动mysql服务(可以在任务管理器，或者以管理员的身份进入cmd-->net start mysql)
+      * 9.使用新密码登录
   * 查询用户
-  ```
+  ```ruby
   -- 切换到mysql数据库
   use mysql;
   -- 查询用户(user)表
@@ -605,10 +617,32 @@ on t1.mgr = t2.id;
   
   -- 删除用户
   drop user 'zhangsan'@'localhost';
+  
+  -- 修改用户的密码
+  update user set password = password('456') where user = 'lisi';
   ```
 
-2.授权
+2.权限管理
+  * 查询权限
+    * 语法：show grants for '用户名'@'主机名';
+  * 授予权限
+    * 语法：grant 权限列表 on 数据库名.表名 to '用户名'@'主机名';
+  * 撤销权限
+    * 语法：revoke 权限列表 on 数据库名.表名 from '用户名'@'主机名';
+```ruby
+-- 查询权限
+show grants for 'lisi'@'%';
+show grants for 'root'@'%';
 
+-- 授予权限
+grant select on db1.account to 'lisi'@'%'; -- 只能进行db1的account表的查询，不能增删改
+grant select,delect,update on db1.account to 'lisi'@'%';
+-- 给张三用户所有的权限，在任意数据库任意表上
+grant all on *.* to 'zhangsan'@'localhost';  -- 用通配符
+
+-- 撤销权限
+revoke update on db1.account from 'lisi'@'%';
+```
 
 
 
