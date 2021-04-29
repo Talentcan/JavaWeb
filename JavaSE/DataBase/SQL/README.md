@@ -584,7 +584,30 @@ left join emp t2
 on t1.mgr = t2.id;
 ```
 
+## DCL：管理用户、授权
+1.管理用户
+  * 添加用户
+    * 语法：create user '用户名'@'主机名' identified by '密码';
+  * 删除用户
+    * 语法：drop user '用户名'@'主机名'; 
+  * 修改用户密码
+  * 查询用户
+  ```
+  -- 切换到mysql数据库
+  use mysql;
+  -- 查询用户(user)表
+  select * from use;
+  -- 其中：通配符%表示可以在任意主机使用用户登录数据库
+  
+  -- 添加用户，一般不直接修改mysql中的user表，这样很不安全
+  create user 'zhangsan'@'localhost' identified by '123';
+  create user 'lisi'@'%' identified by '123';
+  
+  -- 删除用户
+  drop user 'zhangsan'@'localhost';
+  ```
 
+2.授权
 
 
 
