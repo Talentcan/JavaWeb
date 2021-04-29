@@ -53,13 +53,13 @@ ROLLBACK;
 COMMIT;
 
 ```
-2.事物的四大特征  
+2.事务的四大特征  
   * 原子性：事务是不可分割的最小操作单位，要么同时成功，要么同时失败
   * 持久性：如果事务一旦提交或者回滚后，数据库会持久化的保存数据
   * 隔离性：多个事务之间相互独立，不产生相互影响
   * 一致性：事务操作前后，数据总量不变
 
-3.事物的隔离级别  
+3.事务的隔离级别  
   * 概念：多个事务之间隔离，相互独立，但是如果多个事务操作同一批数据，则会引发一些问题，设置不同的隔离级别就可以解决这些问题
   * 存在问题
     * 1.脏读：一个事务读取到另一个事务中没有提交的数据，这相当危险，可能导致所有的操作都被回滚
@@ -68,9 +68,76 @@ COMMIT;
       * 虚读：事务T1读取某一数据后，事务T2对其做了修改，当事务T1再次读取该数据时得到了与前一次不同的结果
     * 3.更新丢失：两个事务同时更新一行数据，一个事务对数据的更新把另一个事务对数据的更新覆盖了。这是由于系统没有执行任何的锁操作，因此并发事务没有被隔离开来
   * 隔离级别
-    * 1.
+    * 1.read uncommitted：读未提交
+      * 产生的问题：脏读，不可重复读，幻读
+    * read committed：读已提交（Oracle默认）
+      * 产生的问题：不可重复读，幻读 
+    * repeatable read：可以重复读（MySQL默认）
+      * 产生的问题：幻读 
+    * serializable：串行化
+      * 可以解决所有问题 
+    * 注意：隔离级别从小到大安全性越来越高，但是效率越来越低
+    * 数据库查询隔离级别：select @@tx_isolation;
+    * 数据库设置隔离级别：set global transaction isolation level 级别字符串; 如：set global transaction isolation level serializable; 设置数据库隔离级别的设置，要重新连接才能生效
 
-
+4.演示不同的事务隔离级别
+  * read uncommitted：读未提交
+  ```ruby
+  -- 设置隔离级别
+  set global transaction isolation level read uncommitted;
+  -- 开启事务
+  start transaction;
+  -- 开始转账操作
+  update account set balance = balance -10 where id=1;
+  update account set balance = balance +10 where id=2;
+  
+  这里的操作是同时开两个数据库，同时开启事务，其中一个开始转账，但是还未提交事务，本来数据还未持久化修改，另一个应该还读不到，但是在这种隔离级别下，另一个能读取到还未提交的数据，这就是脏读。如下面的截图。
+  如果这样操作：张三先执行提交事务，转账，然后然李四查询，结果李四查到钱已经到账户，然后张三再进行回滚操作，然后进行回滚操作，这个时候事务结束，结果钱没转给李四。李四两次查询查到的结果不同，说明还产生了不可重复读的问题。
+  ```
+  ![](../Transaction/图片1.png)
+  ![](../Transaction/图片2.png)
+  * read committed：读已提交
+  ```ruby
+  解决脏读的问题，可以把隔离级别设置成读已提交
+  -- 设置隔离级别
+  set global transaction isolation level read committed;
+  -- 开启事务
+  start transaction;
+  -- 开始转账操作
+  update account set balance = balance -10 where id=1;
+  update account set balance = balance +10 where id=2;
+  -- 提交事务
+  commit;
+  -- 这次要等张三提交了事务后，李四才能查询到钱到了，解决了脏读的问题，但是李四两次查询的结果还是不一样，还是发生了不可重复读的问题
+  ```
+  * repeatable read：可以重复读
+  ```ruby
+  解决不可重复读的问题，把隔离级别设置成可以重复读
+  -- 设置隔离级别
+  set global transaction isolation level repeatable read;
+  -- 开启事务
+  start transaction;
+  -- 开始转账操作
+  update account set balance = balance -10 where id=1;
+  update account set balance = balance +10 where id=2;
+  -- 提交事务
+  commit;
+  -- 这里提交，另一边也不能查询到修改后的数据，解决了数据不可重复读的问提，只有当另外一边的事务也提交后，才能查询到修改后的数据
+  ```
+  * serializable：串行化
+  ```ruby
+  串行化：其实是一个锁表的操作，如果一个事务再操作一个数据表，另一个事务是不可以在操作这张表的，只有当上一个事务提交后，锁打开，它才能对这个表进行操作
+  -- 设置隔离级别
+  set global transaction isolation level serializable;
+  -- 开启事务
+  start transaction;
+  -- 开始转账操作
+  update account set balance = balance -10 where id=1;
+  update account set balance = balance +10 where id=2;
+  -- 提交事务
+  commit;
+  -- 只有当一个事务提交后，另一个事务才能操作这张表，如果上一个事务没有提交，这个事务就写好命令，但是进不去这张表，光标会一直在闪，当上个事务一提交，则这个事务会马上进入这个表
+  ```
 
 
 
