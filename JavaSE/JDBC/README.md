@@ -138,12 +138,235 @@ String sql = "delete from account where id = 3";
 ```
 4.ResultSet：结果集的对象，封装查询结果
   * 方法
-    * next()：光标（游标）向下移动一行，一行一行的向下移动，每次获取某一行的某一列
+    * next()：光标（游标）向下移动一行，一行一行的向下移动，判断当前行是否是最后一行末尾（是否还有数据），如果是最后一行末尾（没有数据）则返回false，否则返回true
     * getxxx(参数)：获取数据
       * xxx：代表数据类型，如：int getInt();String getString()
       * 参数
-        * int：代表列的编号
+        * int：代表列的编号,从1开始，如：getString(1)，获取第一列
+        * String：代表列的名称，如：getDouble("balance")，获取balance这一列的数据
+    * 注意
+      * 使用步骤
+        * 游标向下移动一行
+        * 判断是否有数据
+        * 获取数据
+```ruby
+public static void main(String[] args) {
+        Connection conn =null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try{
+            //1.注册驱动
+            Class.forName("com.mysql.jdbc.Driver");
+            //2.定义sql语句
+            String sql = "select * from account";
+            //3.获取数据库连接对象
+            conn = DriverManager.getConnection
+                    ("jdbc:mysql://localhost:3306/db1", "", "");
+            //4.获取执行sql的对象statement
+            stmt = conn.createStatement();
+            //5.执行sql
+            rs = stmt.executeQuery(sql); //count是影响的行数
+            //6.处理结果
+            //6.1让游标向下移动一行，默认在第一行表头哪行
+            while(rs.next()) {//循环判断游标是否为最后一行
+                //6.2获取数据
+                int id = rs.getInt("id");
+                String name = rs.getString(2);
+                double balance = rs.getDouble(3);
+                System.out.println(id + "  " + name + "   " + balance);
+            }
+        }catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
+        }
+        finally{
+            //因为前面定义为空，如果try代码块中出错，就会出现空指针异常，所以为了避免空指针异常，应先进行一次判断
+            if (rs != null)
+                try{
+                    rs.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            if (stmt != null)
+                try{
+                    stmt.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            if (conn != null)
+                try{
+                    conn.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+        }
+    }
+```
+```ruby
+//练习：定义一个方法，查询emp表的数据将其封装成对象，然后装载成集合，返回。
+package cn.jdbc;
+import java.util.Date;
+//封装Emp表数据的javaBean
+public class Emp {
+    private int id;
+    private String ename;
+    private int job_id;
+    private int mgr;
+    private Date joindate;
+    private double salary;
+    private double bonus;
+    private int dept_id;
+    public Emp() {
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getEname() {
+        return ename;
+    }
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
+    public int getJob_id() {
+        return job_id;
+    }
+    public void setJob_id(int job_id) {
+        this.job_id = job_id;
+    }
+    public int getMgr() {
+        return mgr;
+    }
+    public void setMgr(int mgr) {
+        this.mgr = mgr;
+    }
+    public Date getJoindate() {
+        return joindate;
+    }
+    public void setJoindate(Date joindate) {
+        this.joindate = joindate;
+    }
 
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+    public double getBonus() {
+        return bonus;
+    }
+    public void setBonus(double bounds) {
+        this.bonus = bounds;
+    }
+
+    public int getDept_id() {
+        return dept_id;
+    }
+    public void setDept_id(int dept_id) {
+        this.dept_id = dept_id;
+    }
+    @Override
+    public String toString() {
+        return "Emp{" +
+                "id=" + id +
+                ", ename='" + ename + '\'' +
+                ", job_id=" + job_id +
+                ", mgr=" + mgr +
+                ", joindate=" + joindate +
+                ", salary=" + salary +
+                ", bounds=" + bonus +
+                ", dept_id=" + dept_id +
+                '}';
+    }
+}
+
+package cn.jdbc;
+//定义一个方法，查询emp表的数据将其封装成对象，然后装载成集合，返回
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+public class JDBCDemo3 {
+    //查询所有emp对象
+    public List<Emp> findAll() {
+        Connection conn =null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        List<Emp> list = new ArrayList<>();
+        try{
+            //1.注册驱动
+            Class.forName("com.mysql.jdbc.Driver");
+            //2.定义sql语句
+            String sql = "select * from emp";
+            //3.获取数据库连接对象
+            conn = DriverManager.getConnection
+                    ("jdbc:mysql://localhost:3306/db1", "", "");
+            //4.获取执行sql的对象statement
+            stmt = conn.createStatement();
+            //5.执行sql
+            rs = stmt.executeQuery(sql); //count是影响的行数
+            //6.处理结果集，封装对象，装载集合
+            Emp emp = null;
+            while(rs.next()) {
+                //获取数据
+                int id = rs.getInt("id");
+                String ename = rs.getString("ename");
+                int job_id = rs.getInt("job_id");
+                int mgr = rs.getInt("mgr");
+                Date joindate = rs.getDate("joindate");
+                double salary = rs.getDouble("salary");
+                double bonus = rs.getDouble("bonus");
+                int dept_id = rs.getInt("dept_id");
+                //创建emp对象，复用,并赋值
+                emp = new Emp();
+                emp.setId(id);
+                emp.setEname(ename);
+                emp.setJob_id(job_id);
+                emp.setMgr(mgr);
+                emp.setJoindate(joindate);
+                emp.setSalary(salary);
+                emp.setBonus(bonus);
+                emp.setDept_id(dept_id);
+
+                //装载集合
+                list.add(emp);
+            }
+        }catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
+        }
+        finally{
+            //因为前面定义为空，如果try代码块中出错，就会出现空指针异常，所以为了避免空指针异常，应先进行一次判断
+            if (rs != null)
+                try{
+                    rs.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            if (stmt != null)
+                try{
+                    stmt.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+            if (conn != null)
+                try{
+                    conn.close();
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+        }
+        return list;
+    }
+
+    public static void main(String[] args){
+        List<Emp> list = new JDBCDemo3().findAll();
+        System.out.println(list);
+    }
+}
+```
 5.PreparedStatement：执行sql的对象，功能比statement强大
 
 
