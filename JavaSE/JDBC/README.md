@@ -56,8 +56,8 @@ public static void main(String[] args) throws Exception {
         }
       }
       ```
-      * 注意：mysql5版本以后，这里可以省略不写，因为在刚刚导入的jar包中，META-INF文件中java.sql.Driver文件中帮我们写了，如果我们没写驱动，它会首先帮我们执行这个文件
-    * 获取数据库连接 
+      * 注意：mysql5版本以后，这里可以省略不写，因为在刚刚导入的jar包中，META-INF文件中java.sql.Driver文件中帮我们写了，如果我们没写驱动，它会首先帮我们执行这个文件，自动注册驱动
+    * 获取数据库连接
 
 2.Connection：数据库连接对象
 
