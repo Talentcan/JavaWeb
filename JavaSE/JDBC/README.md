@@ -611,8 +611,8 @@ public static void main(String[] args) {
    * 当所有sql都执行完成时提交事务
  * 回滚事务：void rollback() 
    * 在catch中回滚事务
-```
-案例
+```ruby
+案例：进行一次转账操作
 public static void main(String[] args) {
         Connection conn = null;
         PreparedStatement pstmt1 = null;
