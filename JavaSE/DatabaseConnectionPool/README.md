@@ -185,11 +185,143 @@ public class DruidDemo2 {
     }
 ```
 ## Spring JDBC
+Spring框架对JDBC的简单封装。提供了一个JDBCTemplate对象简化JDBC的开发。  
+步骤
+1.导入jar包  
+```
+commons-logging-1.2.jar
+spring-beans-5.3.4.jar
+spring-core-5.3.6.jar
+spring-jdbc-5.3.4.jar
+spring-tx-5.3.3.jar
+```
+2.创建JDBCTemplate对象，依赖于数据源DateSource
+  * 可以直接new一个：JDBCTemplate template = new JDBCTemplate(ds);
+3.调用JDBCTemplate的方法来完成CURD的操作  
+  * update()：执行DML语句。增删改语句
+  * queryForMap()：查询结果并将结果集封装为map集合，将列名作为key，将值作为value，把这条记录封装成一个map集合
+    * 这个方法查询的结果集长度只能是1
+  * queryForList()：查询结果并将结果封装为list集合
+    * 先将每一条记录封装为一个map集合，然后再讲map集合装载到list集合中
+  * query()：查询结果并将结果封装为Javabean对象
+    * 参数：String sql , RowMapper 
+    * 可以自己用匿名内部类来实现RowMapper，但是一般使用BeanPropertyRowMapper实现类，可以完成数据到Javabean的自动封装，类中的类型是引用类型
+    * BeanPropertyRowMapper<类型>(类型.class)，类型.class是类型的字节码
+  * queryForObject：查询结果并将结果封装为对象
+    * 一般用于聚合函数的查询
+```ruby
+public static void main(String[] args) {
+        //导入jar包
+        //创建JDBCTemplate对象
+        JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
+        String sql = "update account set balance = 5000 where id = ?";
+        int count = template.update(sql,3); // 传参时只要参数和?一一对应
+        System.out.println(count);
+    }
+```
+练习
+  * 需求：操作emp表
+    * 1.修改id=1的salary为10000
+    * 2.添加一条记录
+    * 3.删除刚才添加的记录
+    * 4.查询id为1的记录，将其封装为map集合
+    * 5.查询所有的记录，将其封装为list集合
+    * 6.查询所有的记录，将其封装为emp对象的list集合
+    * 7.查询总的记录数
+```ruby
+public class JDBCTemplateExer {
+    JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
 
+    @Test
+    public void test1(){
+        String sql = "update emp set salary = 10000 where id = ?";
+        int count = template.update(sql,1001);
+        System.out.println(count);
+    }
 
+    @Test
+    public void test2(){
+        String sql = "insert into emp(id,ename,dept_id) values (?,?,?)";
+        int count = template.update(sql,1015,"TalentCan",10);
+        System.out.println(count);
+    }
 
+    @Test
+    public void test3(){
+        String sql = "delete from emp where id = ?";
+        int count = template.update(sql,1015);
+        System.out.println(count);
+    }
 
+    @Test
+    public void test4(){
+        //这个方法查询的结果集长度只能是1
+        String sql = "select * from emp where id = ?";
+        Map<String, Object> map = template.queryForMap(sql, 1001);
+        System.out.println(map);
+        //{id=1001, ename=孙悟空, job_id=4, mgr=1004, joindate=2000-12-17, salary=10000.00, bonus=null, dept_id=20}
+    }
 
+    @Test
+    public void test5(){
+        String sql = "select * from emp";
+        List<Map<String, Object>> maps = template.queryForList(sql);
+        System.out.println(maps);
+    }
+
+    @Test
+    public void test6_1(){
+        String sql = "select * from emp";
+        //用query要传递两个参数，其中new RowMapper<Emp>()是
+        List<Emp> list = template.query(sql, new RowMapper<Emp>() {
+            @Override
+            public Emp mapRow(ResultSet rs, int i) throws SQLException {
+                int id = rs.getInt("id");
+                String ename = rs.getString("ename");
+                int job_id = rs.getInt("job_id");
+                int mgr = rs.getInt("mgr");
+                Date joindate = rs.getDate("joindate");
+                double salary = rs.getDouble("salary");
+                double bonus = rs.getDouble("bonus");
+                int dept_id = rs.getInt("dept_id");
+
+                Emp emp = new Emp();
+                emp.setId(id);
+                emp.setEname(ename);
+                emp.setJob_id(job_id);
+                emp.setMgr(mgr);
+                emp.setJoindate(joindate);
+                emp.setSalary(salary);
+                emp.setBonus(bonus);
+                emp.setDept_id(dept_id);
+                return emp;
+            }
+        });
+        for (Emp emp:list) {
+            System.out.println(emp);
+        }
+    }
+
+    @Test
+    public void test6_2(){
+        String sql = "select * from emp";
+        //用已经封装好的类，不用自己实现，它会自己实现RowMapper接口
+        //但它里面的数据类型要是引用类型，要把emp类中的数据类型从基本数据类型改为引用数据类型
+        List<Emp> list = template.query(sql, new BeanPropertyRowMapper<Emp>(Emp.class));
+        for (Emp emp:list) {
+            System.out.println(emp);
+        }
+    }
+
+    @Test
+    public void test7(){
+        String sql = "select count(id) from emp";
+        Integer total= template.queryForObject(sql,Integer.class);
+        System.out.println(total);
+    }
+}
+
+```
 
 
 
