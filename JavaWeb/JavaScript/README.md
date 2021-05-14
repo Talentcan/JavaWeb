@@ -87,11 +87,103 @@ ECMAScript：客户端脚本语言的标准
           * ===：全等于，在比较之前，先判断类型，如果类型不一样，则直接返回false
     * 逻辑运算符
       * &&，||，!
+      * 其他类型转boolean：如果其他类型参与逻辑运算
+        * number转boolean：0和NaN为假，非0为真
+        * string转boolean：除了空字符串（""）为false，其余都是true
+        * null和undefined转boolean：都是false
+        * 对象转boolean：所有对象都是true
+        ```
+        //JavaScript中可以这样来定义，简化书写
+        //用来判断是否为空字符串，防止空指针异常
+        var obj = "";
+        if(obj){ //防止空指针异常
+          document.write("123");
+        }
+        //等于
+        if(obj != null && obj.length > 0){
+          document.write("123");
+        }
+        ```
     * 三元运算符
       * ? ：
+        * 语法：表达式?值1:值2;
+        * 判断表达式的值，如果是true则取值1，如果是false则取值2；
   * 流程控制语句
+    * 1.if...else...
+    * 2.switch
+      * 在java中，switch语句中可以接收的数据类型：byte，int，short，char，枚举（1.5后），String（1.7后）
+      * 在JavaScript中，switch语句可以接收任意的原始数据类型
+    * 3.while
+    * 4.do...while...
+    * 5.for
+  * JavaScript的特殊语法：都不建议使用
+    * 1.语句以;号结尾，如果一行只有一条语句则;号可以省略
+    * 2.变量的定义使用var关键字，也可以不使用
+      * 用和不用的区别：变量的作用范围不一样
+        * 用：定义的变量是局部变量
+        * 不用：定义的变量是全局变量
+```ruby
+练习：打印9*9乘法表，在页面展示
+<title>9*9乘法表</title>
+    <style>
+        td{
+            border: 1px solid;
+        }
+    </style>
+    
+    <script>
+        document.write("<table align='center'>");
+        for(var i=1 ; i<=9 ; i++){
+            document.write("<tr>");
+            for (var j=1 ; j<=i ; j++){
+                document.write("<td>");
+                document.write(i + " * " + j + " = " + i*j);
+                document.write("&nbsp;&nbsp;&nbsp;");
+                document.write("</td>");
+            }
+            document.write("</tr>");
+        }
+        document.write("</table>");
+    </script>
+```
 2.基本对象
+  * Function对象：函数（方法）对象
+    * 创建
+      * 1.var fun = new Function(形式参数列表，方法体);不常用
+      * 2.function 方法名称(形式参数列表){方法体} 常用
+      * 3.var 方法名 = function(形式参数列表){方法体} 
+    * 方法
+    * 属性
+    * 特点
+      * 1.方法定义时，形参的类型不用写，都是var
+      * 2.方法是一个对象，如果定义名称相同的方法，会覆盖
+    * 调用
+      * 方法名称(实际参数列表);
+```ruby
+//创建方式1
+var fun1 = new Function(a,"b","alert(a)");
+fun(3,4);
+//创建方式2
+function fun2(a,b) {
+  alert(a+b);
+}
+fun2(3,4);
+//创建方式3
+var fun3 = function (a,b) {
+  alert(a-b);
+}
+fun3(5,3);
 
+
+```
+  * Array
+  * Boolean
+  * Date
+  * Math
+  * Number
+  * String
+  * RegExp
+  * Global
 
 
 
