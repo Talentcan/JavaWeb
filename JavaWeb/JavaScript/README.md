@@ -202,7 +202,7 @@ document.write(a);
     * 方法
       * 1.join()：将数组中的元素按照指定的分隔符拼接为字符串，如果没有参数则默认用,号拼接，有参数就用参数分隔拼接
       * 2.push()：向数组的末尾添加一个或更多元素，并返回新的长度
-![](../1.jpg)
+![](./1.jpg)
     * 属性
       * length：数组长度
     * 特点
@@ -210,12 +210,35 @@ document.write(a);
       * 2.在JavaScript数组的长度是可变的
       
   * Boolean
-  * Date
-  * Math
-  * Number
-  * String
-  * RegExp
-  * Global
+  * Date：日期对象
+    * 创建
+      * var date = new Date();
+    * 方法
+      * toLocalString()：返回当前date对象对应的时间本地字符串格式
+      * getTime()：获取毫秒值，返回1970年1月1日到当前时间的毫秒值
+  * Math：数学对象
+    * 创建
+      * 特点：Math对象不用创建，可以直接使用。Math.方法名 就可以用
+    * 方法
+      * random()：返回0-1之间的随机数，包含0，不包含1，即[0,1)
+      * ceil(x)：对数进行上舍入，向上取整
+      * floor(x)：对数进行下舍入，向下取整
+      * round(x)：把数四舍五入为最接近的整数
+
+    * 属性
+      * PI：document.write(Math.PI);
+```
+//练习：取1-100之间的随机整数
+//分析：Math.random()得到[0,1)之间的小数，*100得到[0,99.999]，向下取整得到[0,99]，最后+1得到[1,100]
+var num = Math.floor((Math.random()*100))+1;
+document.write(num + "<br>");
+```
+    * Number
+    * String
+    * RegExp：正则表达式对象
+      * 正则表达式：定义字符串的组成规则
+      * 
+    * Global
 
 
 
