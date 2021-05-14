@@ -154,9 +154,12 @@ ECMAScript：客户端脚本语言的标准
       * 3.var 方法名 = function(形式参数列表){方法体} 
     * 方法
     * 属性
+      * length：代表形参的个数
     * 特点
       * 1.方法定义时，形参的类型不用写，都是var
       * 2.方法是一个对象，如果定义名称相同的方法，会覆盖
+      * 3.在JavaScript中，方法的调用只与方法的名称有关，与参数列表无关
+      * 4.在方法声明中有一个隐藏的内置对象（数组），arguments，封装所有的实际参数
     * 调用
       * 方法名称(实际参数列表);
 ```ruby
@@ -174,9 +177,38 @@ var fun3 = function (a,b) {
 }
 fun3(5,3);
 
+//方法调用,以下的都可以，没有就不接收，
+fun2(1,2);
+fun2(1);
+fun2();
+fun2(1,2，3);
 
+//求任意个数的和
+function add(){
+  var sum =0;
+  for(var i=0 ; i<arguments.length ; i++){
+    sum = sum + arguments[i];
+  }
+  return sum;
+}
+var a = add(1,2,3,4,5,6,7,8,9,10);
+document.write(a);
 ```
-  * Array
+  * Array：数组对象
+    * 创建：
+      * 1.var arr = new Array(元素列表);
+      * 2.var arr = new Array(默认长度); 如果只有一个数，则是默认的长度，而不是元素列表
+      * 3.var arr = [元素列表];
+    * 方法
+      * 1.join()：将数组中的元素按照指定的分隔符拼接为字符串，如果没有参数则默认用,号拼接，有参数就用参数分隔拼接
+      * 2.push()：向数组的末尾添加一个或更多元素，并返回新的长度
+![](../1.jpg)
+    * 属性
+      * length：数组长度
+    * 特点
+      * 1.JavaScript中数组的元素类型是可变的
+      * 2.在JavaScript数组的长度是可变的
+      
   * Boolean
   * Date
   * Math
