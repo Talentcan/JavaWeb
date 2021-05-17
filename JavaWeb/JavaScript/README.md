@@ -227,18 +227,61 @@ document.write(a);
 
     * 属性
       * PI：document.write(Math.PI);
-```
-//练习：取1-100之间的随机整数
-//分析：Math.random()得到[0,1)之间的小数，*100得到[0,99.999]，向下取整得到[0,99]，最后+1得到[1,100]
-var num = Math.floor((Math.random()*100))+1;
-document.write(num + "<br>");
-```
-    * Number
-    * String
-    * RegExp：正则表达式对象
+  ```ruby
+  //练习：取1-100之间的随机整数
+  //分析：Math.random()得到[0,1)之间的小数，*100得到[0,99.999]，向下取整得到[0,99]，最后+1得到[1,100]
+  var num = Math.floor((Math.random()*100))+1;
+  document.write(num + "<br>");
+  ```
+  * Number
+  * String
+  * RegExp：正则表达式对象
       * 正则表达式：定义字符串的组成规则
-      * 
-    * Global
+        * 1.单个字符：[]，如：[a](单个字符a),[ab](a或b中一个),[a-zA-Z0-9](a-z或A-Z或0-9中的任意一个)
+          * 特殊符号表示特殊含义的单个字符：
+          * \d：表示单个数字字符 == [0-9]
+          * \w：单个单词字符 == [a-zA-Z0-9]
+        * 2.量词符号
+          * ?：表示出现0次或1次
+          * *：表示出现0次或多次
+          * +：出现1次或多次，如：\w+（表示单个单词字符出现1次或多次）
+          * {m,n}：表示 m <= 数量 <= n，在m和n之间，如：\w{6,12}（表示单个单词字符出现6到12次之间）
+            * m如果缺省：{,n}：表示最多n次
+            * n如果缺省：{m,}：表示最少m次
+        * 3.开始结束符号
+          * ^：表示开始
+          * $：表示结束
+      * 正则对象
+        * 1.创建
+          * var reg = new RegExp("正则表达式");
+          * var reg = /正则表达式/;
+        * 2.方法
+          * test(参数)：验证指定的字符串是否符合正则定义的规范
+      ```
+      var reg1 = new RegExp("^\\w{6,12}$");
+        var reg2 = /^\w{6,12}$/;
+        // alert(reg1);
+        // alert(reg2);
+        var string = "TalentCan";
+        document.write(reg2.test(string));
+      ```
+  * Global
+    * 特点：是一个全局对象，Global中封装的方法不需要对象就可以直接调用，方法名();
+    * 方法
+      * encodeURI()：url编码
+      * decodeURI()：url解码
+      * encodeURIComponent()：url编码
+      * decodeURIComponent()：url解码
+    * url编码
+      * UTF-8中一个汉字占3个字节
+      * GDK中一个汉字占2个字节
+      ```
+      var str = "帅帅灿";
+      var encode = encodeURI(str);
+      document.write(encode + "</br>")
+      ```
+
+
 
 
 
