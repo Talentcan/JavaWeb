@@ -270,15 +270,28 @@ document.write(a);
     * 方法
       * encodeURI()：url编码
       * decodeURI()：url解码
-      * encodeURIComponent()：url编码
+      * encodeURIComponent()：url编码，编码的字符更多，比如一些//，:等一些字符
       * decodeURIComponent()：url解码
+      * paresInt()：将字符串转为数字
+        * 逐一判断每一个字符是否是数字，直到不是数字为止，将前边数字部分转为number
+        * 如parseInt("123")==123;parseInt("123abc")==123;parseInt("a123bc")==NAN
+      * isNaN()：判断一个值是否是NaN
+        * 因为NaN类型不能和任意类型比较，也不能和自己比较，参与的==比较全部为false，如：var a = NaN;document.write(a == NaN); //false
+      * eval()：将JavaScript字符串作为脚本代码来执行，如：var s = "alert(123)";eval(s); //123
     * url编码
-      * UTF-8中一个汉字占3个字节
-      * GDK中一个汉字占2个字节
+      * UTF-8中一个汉字占3个字节，一个字节前面一个%号，所以有n个字，就有3*n个%号
+      * GDK中一个汉字占2个字节，一个字节前面一个%号，所以有n个字，就有2*n个%号
       ```
       var str = "帅帅灿";
       var encode = encodeURI(str);
       document.write(encode + "</br>")
+      //%E5%B8%85%E5%B8%85%E7%81%BF
+      document.write(decodeURI(encode) + "</br>") //解码
+      
+      var encode1 = encodeURIComponent(str);
+      document.write(encode1 + "</br>")
+      //%E5%B8%85%E5%B8%85%E7%81%BF
+      document.write(decodeURIComponent(encode1) + "</br>") //解码
       ```
 
 
