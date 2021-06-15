@@ -357,8 +357,179 @@ W3C DOM标准被分为3个不同的部分
     * parentNode：返回节点的父节点
 ```ruby
 //案例：动态表格，可以添加删除数据
+<head>
+    <meta charset="UTF-8">
+    <title>动态表格</title>
+    <style>
+        div{
+            text-align: center;
+            margin: 50px;
+        }
+        table{
+            border: 1px solid;
+            margin: auto;
+            width: 500px;
+        }
+        td,th{
+            text-align: center;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <input type="text" id="id" placeholder="请输入编号">
+    <input type="text" id="name" placeholder="请输入姓名">
+    <input type="text" id="gender" placeholder="请输入性别">
+    <input type="button" value="添加" id="btn_add">
+</div>
+<table>
+    <caption>学生信息表</caption>
+
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>操作</th>
+    </tr>
+
+    <tr>
+        <td>1</td>
+        <td>帅帅灿</td>
+        <td>男</td>
+        <td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+    </tr>
+
+</table>
+</body>
+<script>
+    /**
+     * 分析
+     * 1.添加
+     *   1.1给添加按钮绑定单击事件
+     *   1.2获取文本框的内容
+     *   1.3创建td，并设置td的文本为文本框的内容
+     *   1.4创建tr,将td添加到tr中
+     *   1.5获取table，将tr添加到table中
+     * 2.删除
+     *   2.1确定点击的是哪一个超链接：<a href="javascript:void(0);" onclick="delTr(this)">删除</a>
+     *   2.2删除：removeChild()：通过父节点删除子节点
+     *
+     */
+    //添加
+    document.getElementById("btn_add").onclick = function () {
+        var id = document.getElementById("id").value;
+        var name = document.getElementById("name").value;
+        var gender = document.getElementById("gender").value;
+
+        //创建td，并设置内容
+        var td_id = document.createElement("td");
+        var text_id = document.createTextNode(id);
+        td_id.appendChild(text_id);
+        var td_name = document.createElement("td");
+        var text_name = document.createTextNode(name);
+        td_name.appendChild(text_name);
+        var td_gender = document.createElement("td");
+        var text_gender = document.createTextNode(gender);
+        td_gender.appendChild(text_gender);
+        var td_a = document.createElement("td");
+        var ele_a = document.createElement("a");
+        ele_a.setAttribute("href","javascript:void(0);");//添加属性
+        ele_a.setAttribute("onclick","delTr(this);");//添加属性
+        var text_a = document.createTextNode("删除");
+        ele_a.appendChild(text_a);//添加文本
+        td_a.appendChild(ele_a);//添加超链接
+
+        //创建tr，并将td添加到tr中
+        var tr = document.createElement("tr");
+        tr.appendChild(td_id);
+        tr.appendChild(td_name);
+        tr.appendChild(td_gender);
+        tr.append(td_a);
+
+        //获取table，将tr添加到table中
+        var table = document.getElementsByTagName("table")[0];
+        table.appendChild(tr);
+    }
+    //删除
+    function delTr(obj) {
+        var table = obj.parentNode.parentNode.parentNode;
+        var tr = obj.parentNode.parentNode;
+        table.removeChild(tr);
+    }
+</script>
 ```
+## HTML DOM
+1.标签体的设置和获取：innerHTML
+```ruby
+<body>
+<div id="div1">div</div>
+</body>
+<script>
+    var div = document.getElementById("div1");
+    var innerHTML = div.innerHTML;
+    //alert(innerHTML);
+    //div标签替换为文本输入框
+    div.innerHTML = "<input type='text'>";
+    //div标签中追加一个文本输入框
+    div.innerHTML += "<input type='text'>";
+</script>
 
-
-
+//在上一个动态表格的案例中
+//使用innerHTML添加
+document.getElementById("btn_add").onclick = function () {
+    var id = document.getElementById("id").value;
+    var name = document.getElementById("name").value;
+    var gender = document.getElementById("gender").value;
+    //获取table
+    var table = document.getElementsByTagName("table")[0];
+    table.innerHTML += "<tr>\n" +
+        "        <td>" + id + "</td>\n" +
+        "        <td>" + name + "</td>\n" +
+        "        <td>" + gender + "</td>\n" +
+        "        <td><a href=\"javascript:void(0);\" onclick=\"delTr(this);\">删除</a></td>\n" +
+        "    </tr>"
+}
+```
+2.使用html元素对象的属性  
+3.控制元素样式
+  * 使用元素的style属性来设置
+```ruby
+<body>
+<div id="div1">div</div>
+</body>
+<script>
+    var div = document.getElementById("div1");
+    div.onclick = function () {
+        div.style.border = "1px solid red";
+        div.style.width = "200px";
+        //原来是font-size的要变成fontSize
+        div.style.fontSize = "20px";
+    }
+</script>
+```
+  * 提前定义好类选择器的样式，通过元素的className属性来设置其class属性值
+```ruby
+<style>
+    .d1{
+        border: 1px solid red;
+        width: 100px;
+        height: 100px;
+    }
+    .d2{
+        border: 2px solid blue;
+        width: 200px;
+        height: 200px;
+    }
+</style>
+<body>
+<div id="div2">div2</div>
+</body>
+<script>
+    var div2 = document.getElementById("div2");
+    div2.onclick = function () {
+        div2.className = "d2";
+    }
+</script>
+```
 
