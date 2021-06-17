@@ -532,4 +532,124 @@ document.getElementById("btn_add").onclick = function () {
     }
 </script>
 ```
+# 事件
+## 事件的监听机制
+  * 概念：某些组件被执行了某些操作后，触发某些代码的执行。
+    * 事件：某些操作，如：单击，双击，按下键盘，鼠标移动
+    * 事件源：某些组件：如：按钮，文本输入框等
+    * 监听器：某些执行的代码
+    * 注册监听：将事件，事件源，监听器结合在一起。当事件源上发生了某个事件，则触发执行某个监听器代码
+  * 常见的事件
+    * 1.点击事件
+      * onclick：单击事件
+      * ondblclick：双击事件
+    * 2.焦点事件
+      * onblur：元素失去焦点
+        * 一般用于表单验证
+      * onfocus：元素获得焦点
+    * 3.加载事件：当script标签在body标签的前面，会先加载script中的内，网页中的一些内容可能无法实现script中的效果，可以使用onload先加载body中的内容
+      * onload：一张页面或一幅图像完成加载
+    * 4.鼠标事件
+      * onmousedown：鼠标按钮被按下
+        * 在定义方法时，定义一个形参，接受event对象
+        * event对象的button属性可以获取鼠标的哪个键被点击了
+      * onmouseup：鼠标按钮被松开
+      * onmousemove：鼠标被移动
+      * onmouseout：鼠标从某元素移开
+      * onmouseover：鼠标移到某元素上
+    * 5.键盘事件
+      * onkeydown：某个键盘按键被按下
+      * onkeyup：某个键盘按键被松开
+      * onkeypress：某个键盘按键被按下并松开
+    * 6.选择和改变
+      * onchange：域的内容被改变
+      * onselect：文本被选中
+    * 7.表单事件
+      * onsubmit：表单的确认按钮被点击
+        * 可以阻止表单的提交，可以验证
+        * 方法返回false则表单被阻止提交
+      * onreset：表单的重置按钮被点击
+```ruby
+//常用的事件演示
+    <script>
+        window.onload = function(){
+            document.getElementById("dblclick").ondblclick = function () {
+                alert("双击");
+            }
+
+            // document.getElementById("username").onblur = function () {
+            //     alert("文本框失去焦点");
+            // }
+
+            // document.getElementById("username").onmousemove = function () {
+            //     alert("鼠标到我上面了");
+            // }
+
+            // document.getElementById("username").onmousedown = function (event) {
+            //     // alert("鼠标点击我了");
+            //     alert(event.button);
+            // }
+
+            // document.getElementById("username").onkeypress = function (event) {
+            //     alert(event.keyCode);
+            // }
+
+            // document.getElementById("username").onchange = function () {
+            //     alert("发生改变了");
+            // }
+            // document.getElementById("city").onchange = function () {
+            //     alert("发生改变了");
+            // }
+
+            // document.getElementById("form").onsubmit = function () {
+            //     var flag = false;
+            //     return flag;
+            // }
+
+        }
+        function checkForm() {
+            return false;
+        }
+    </script>
+</head>
+<body>
+<input type="button" id="dblclick" value="双击">
+
+<form action="#" id="form" onclick="return  checkForm();">
+    <input id="username" name="username">
+    <select id="city">
+        <option>---请选择---</option>
+        <option>---北京---</option>
+        <option>---上海---</option>
+        <option>---昆明---</option>
+        <option>---腾冲---</option>
+    </select>
+    <input type="submit" value="提交">
+</form>
+</body>
+```
+```
+//案例：表格里的行全选
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
