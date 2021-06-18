@@ -630,7 +630,140 @@ document.getElementById("btn_add").onclick = function () {
 ```
 ```
 //案例：表格里的行全选
+    <style>
+        .add{
+            text-align: center;
+            margin: 50px;
+        }
+        table{
+            border: 1px solid;
+            margin: auto;
+            width: 500px;
+        }
+        td,th{
+            text-align: center;
+            border: 1px solid;
+        }
+        .choose{
+            margin-left: 23%;
+            margin-top: 10px;
+        }
+        .out{
+            background-color: white;
+        }
+        .over{
+            background-color: pink;
+        }
+    </style>
+</head>
+<body>
+<div class="add">
+    <input type="text" id="id" placeholder="请输入编号">
+    <input type="text" id="name" placeholder="请输入姓名">
+    <input type="text" id="gender" placeholder="请输入性别">
+    <input type="button" value="添加" id="btn_add">
+</div>
+<table>
+    <caption>学生信息表</caption>
 
+    <tr>
+        <th><input type="checkbox" name="cb" id="firstCb"></th>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>操作</th>
+    </tr>
+
+    <tr>
+        <td><input type="checkbox" name="cb"></td>
+        <td>1</td>
+        <td>帅帅灿</td>
+        <td>男</td>
+        <td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+    </tr>
+    <tr>
+        <td><input type="checkbox" name="cb"></td>
+        <td>2</td>
+        <td>胡灿</td>
+        <td>男</td>
+        <td><a href="javascript:void(0);" onclick="delTr(this);">删除</a></td>
+    </tr>
+</table>
+<div class="choose">
+<input id="choose1" type="button" value="全选">
+<input id="choose2" type="button" value="全不选">
+<input id="choose3" type="button" value="反选">
+</div>
+</body>
+<script>
+    //使用innerHTML添加
+    document.getElementById("btn_add").onclick = function () {
+        var id = document.getElementById("id").value;
+        var name = document.getElementById("name").value;
+        var gender = document.getElementById("gender").value;
+        //获取table
+        var table = document.getElementsByTagName("table")[0];
+        table.innerHTML += "<tr>\n" +
+            "<td><input type=\"checkbox\"  name=\"cb\"></td>" +
+            "        <td>" + id + "</td>\n" +
+            "        <td>" + name + "</td>\n" +
+            "        <td>" + gender + "</td>\n" +
+            "        <td><a href=\"javascript:void(0);\" onclick=\"delTr(this);\">删除</a></td>\n" +
+            "    </tr>"
+    }
+    //删除
+    function delTr(obj) {
+        var table = obj.parentNode.parentNode.parentNode;
+        var tr = obj.parentNode.parentNode;
+        table.removeChild(tr);
+    }
+    /*
+    *1.全选：获取所有的CheckBox状态,遍历cb设置每一个cb的状态为选中，用属性checked
+    * */
+    window.onload = function () {
+        //全选
+        document.getElementById("choose1").onclick = function () {
+            var cbs = document.getElementsByName("cb");
+            for (var i=0 ; i<cbs.length ; i++){
+                cbs[i].checked = true;
+            }
+        }
+        //全不选
+        document.getElementById("choose2").onclick = function () {
+            var cbs = document.getElementsByName("cb");
+            for (var i=0 ; i<cbs.length ; i++){
+                cbs[i].checked = false;
+            }
+        }
+        //反选
+        document.getElementById("choose3").onclick = function () {
+            var cbs = document.getElementsByName("cb");
+            for (var i=0 ; i<cbs.length ; i++){
+                if (cbs[i].checked == true)
+                    cbs[i].checked = false;
+                else
+                    cbs[i].checked = true;
+            }
+        }
+        //如果编号那里的复选框选中，则全部被选中
+        document.getElementById("firstCb").onclick = function () {
+            var cbs = document.getElementsByName("cb");
+            for (var i=0 ; i<cbs.length ; i++){
+                cbs[i].checked = this.checked;
+            }
+        }
+        //给所有tr绑定鼠标事件
+        var trs = document.getElementsByTagName("tr");
+        for (var i=0 ; i<trs.length ; i++){
+            trs[i].onmouseover = function () {
+                this.className = "over";
+            }
+            trs[i].onmouseout = function () {
+                this.className = "out";
+            }
+        }
+    }
+</script>
 ```
 
 
