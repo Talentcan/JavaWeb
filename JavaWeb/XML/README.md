@@ -40,7 +40,9 @@
         * 外部dtd：将约束的规则定义在外部的dtd文件中
           * 本地：<!DOCTYPE 根标签名 SYSTEM "dtd文件的位置">
           * 网络：<!DOCTYPE 根标签名 PUBLIC "dtd文件的名字" "dtd文件的位置URL">
-
+    * Schema：
+      * 写Schema：
+        * 填写
 
 
 
