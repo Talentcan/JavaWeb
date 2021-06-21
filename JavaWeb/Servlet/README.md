@@ -4,10 +4,10 @@
   * 我们定义一个类，实现servlet接口，复写方法
 
 ## servlet快速入门
-1.创建javaEE项目
-2.定义一个类，实现servlet接口
-3.实现接口中的抽象方法
-4.配置servlet：在web.xml中配置
+1.创建javaEE项目  
+2.定义一个类，实现servlet接口  
+3.实现接口中的抽象方法  
+4.配置servlet：在web.xml中配置  
 ```ruby
 <!--  配置servlet，在<web-app>标签中-->
     <servlet>
@@ -20,7 +20,7 @@
         <url-pattern>/demo1</url-pattern>
     </servlet-mapping>
 ```
-执行原理
+执行原理  
   * 1.当服务器接收到客户端浏览器的请求后，会解析请求URL路径，通过虚拟路径，获得访问的servlet的资源路径
   * 2.查找web.xml文件，是否有对应的\<url-pattern>标签体中的内容
   * 3.如果有则在找到\<servlet-class>全类名，然后使用反射的原理
@@ -29,7 +29,7 @@
 
 
 
-servlet中的生命周期
+servlet中的生命周期  
 1.被创建：执行init方法，只执行一次  
   * servlet默认情况下，第一次被访问时，servlet被创建
   * 在服务器启动时创建，在\<servlet>标签下用\<load-on-startup>标签，如果标签包裹的值为负数则表示第一次访问时创建，为0或正整数时表示在服务器启动时创建  
