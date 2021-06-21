@@ -39,9 +39,16 @@ web服务器软件：在web服务器软件中，可以部署web项目，让用�
       * 添加标签：ConText docBase="项目存放的路径" path="虚拟目录" />
     * 3.热部署：在conf\Catalina\localhost中创建任意名称的xml文件，在文件中编写 ConText docBase="项目存放的路径" />
       * 虚拟目录：xml文件的名称
+静态项目和动态项目
+  * 目录结构
+    * java动态项目的目录结构
+      * 项目的根目录
+      *   ----WEB-INF目录
+      *     ----web.xml：web项目的核心配置文件
+      *     ----classes目录：放置字节码文件的目录
+      *     ----lib目录：放置依赖的jar包
 
-
-
+将Tomcat集成到IDEA中，并且创建javaEE的项目，部署项目
 
 
 
