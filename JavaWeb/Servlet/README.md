@@ -34,8 +34,14 @@ servlet中的生命周期
   * servlet默认情况下，第一次被访问时，servlet被创建
   * 在服务器启动时创建，在\<servlet>标签下用\<load-on-startup>标签，如果标签包裹的值为负数则表示第一次访问时创建，为0或正整数时表示在服务器启动时创建  
   * servlet的init方法，只执行一次，说明一个servlet在内存中只有一个对象，servlet是单例的
+    * 多个用户同时访问时，可能存在线程的安全问题
+    * 解决：尽量不要在servlet中定义成员变量，可以在service方法中定义成员变量。即使定义了成员变量，也不要对其修改值
 2.提供服务：执行service方法，可以执行多次  
+  * 每次访问servlet时，service方法都会被调用一次
 3.被销毁：执行destroy方法，只执行一次  
+  * servlet被销毁时执行，服务器关闭时，servlet被销毁
+  * 只有服务器正常关闭时，才会执行destroy方法
+  * destroy方法在servlet被销毁前执行，一般用于释放资源
 
 
 
