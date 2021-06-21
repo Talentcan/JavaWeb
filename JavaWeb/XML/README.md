@@ -113,13 +113,13 @@ public class JsoupDemo1 {
     }
 }
 ```
-     * 快速查询方式
-       * selector：选择器
-         * 使用的方法：elements select(String cssQuery)
-         * 语法：参考selector类中定义的语法
-       * XPath：XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言
-         * 使用jsoup的xpath需要额外导入jar包，JXDocument
-         * 查询参考手册，使用xpath的语法来完成查询
+* 快速查询方式
+  * selector：选择器
+    * 使用的方法：elements select(String cssQuery)
+    * 语法：参考selector类中定义的语法
+   * XPath：XPath即为XML路径语言（XML Path Language），它是一种用来确定XML文档中某部分位置的语言
+     * 使用jsoup的xpath需要额外导入jar包，JXDocument
+     * 查询参考手册，使用xpath的语法来完成查询
 
 
 
