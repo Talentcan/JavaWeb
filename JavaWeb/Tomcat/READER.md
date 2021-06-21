@@ -26,10 +26,46 @@ web服务器软件：在web服务器软件中，可以部署web项目，让用�
       * 1.找到占用的端口号，并且找到对应的进程，杀死该进程
         * cmd-->netstat ano-->看PID-->在任务管理器中将刚才PID的进程结束
       * 2.修改自身的端口号
-        * conf/server.xml中修改<Connector port="8080" protocol="HTTP/1.1">中port的值
+        * conf/server.xml中修改Connector port="8080" protocol="HTTP/1.1"中port的值
         * 一般将Tomcat的默认端口号修改为80。80端口号是http协议的默认端口号，在访问时，可以不用输入端口号
 5.关闭  
 6.配置
   * 部署项目的方式
     * 1.直接将web项目放到webapps目录下即可
-      * 
+      * localhost:8080/项目访问路径/项目资源，项目的访问路径-->虚拟目录：/项目访问路径path
+      * 简化部署：将项目打成war包，再把war包放置到webapps目录下，war包会自动解压缩，并且删除的时候将war删除，项目会自动删除
+    * 2.配置conf/server.xml文件
+      * 在Host标签体中配置
+      * 添加标签：ConText docBase="项目存放的路径" path="虚拟目录" />
+    * 3.热部署：在conf\Catalina\localhost中创建任意名称的xml文件，在文件中编写 ConText docBase="项目存放的路径" />
+      * 虚拟目录：xml文件的名称
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
