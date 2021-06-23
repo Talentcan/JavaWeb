@@ -20,7 +20,7 @@
         <url-pattern>/demo1</url-pattern>
     </servlet-mapping>
 ```
-执行原理  
+## 执行原理  
   * 1.当服务器接收到客户端浏览器的请求后，会解析请求URL路径，通过虚拟路径，获得访问的servlet的资源路径
   * 2.查找web.xml文件，是否有对应的\<url-pattern>标签体中的内容
   * 3.如果有则在找到\<servlet-class>全类名，然后使用反射的原理
@@ -29,7 +29,7 @@
 
 
 
-servlet中的生命周期  
+## servlet中的生命周期  
 1.被创建：执行init方法，只执行一次  
   * servlet默认情况下，第一次被访问时，servlet被创建
   * 在服务器启动时创建，在\<servlet>标签下用\<load-on-startup>标签，如果标签包裹的值为负数则表示第一次访问时创建，为0或正整数时表示在服务器启动时创建  
@@ -52,7 +52,7 @@ servlet中的生命周期
 4.public ServletConfig getServletConfig()：获取ServletConfig对象，ServletConfig对象是servlet的配置对象  
 5.public String getServletInfo()：获取servlet的一些信息，如：版本，作者等  
 
-servlet3.0
+## servlet3.0注解配置
   * 好处：支持注解配置，可以不需要web.xml。
   * 步骤
     * 1.创建javaEE项目，选择servlet的版本3.0以上，可以不需要web.xml
@@ -61,15 +61,30 @@ servlet3.0
     * 4.在类上使用@WebServlet注解，进行配置
       * @WebServlet("资源路径")
 
+## servlet的体系结构
+servlet --- 接口  
+    | 实现  
+GenericServlet --- 抽象类  
+    | 继承  
+HttpServlet --- 抽象类  
 
+GenericServlet：将servlet接口中其他的方法做了默认空实现，只将service()方法作为抽象
+  * 以后定义servlet类时，可以继承GenericServlet，实现service()方法即可，其余方法如果用到，可以复写。  
+HttpServlet：对http协议的一种封装，简化操作
+  * 定义类继承HttpServlet
+  * 复写doGet/doPost方法
 
+## servlet相关配置
+1.urlpartten：servlet访问路径
+  * 因为返回值是数组类型的，所以可以设置多个访问路径，即一个servlet可以设置多个访问路径，如@WebServlet({"/路径1","/路径2","/路径3"})
+  * 路径的定义规则
+    * /xxx
+    * /xxx/xxx：多层路径，目录结构，如：@WebServlet("/user/demo3")
+    * *.do ：.后面的可以自己设置，如.aaa或.bbb，.前面是项目名，如：@WebServlet("demo3.do")，不加/
 
-
-
-
-
-
-
+## HTTP
+概念：Hyper Text Transfer Protocol 超文本传输协议
+  * 传输协议：定义了
 
 
 
