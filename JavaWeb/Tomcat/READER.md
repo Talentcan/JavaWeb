@@ -53,9 +53,11 @@ web服务器软件：在web服务器软件中，可以部署web项目，让用�
 ## IDEA与Tomcat的相关配置
 1.IDEA会为每一个Tomcat部署的项目单独建立一份配置文件
   * 查看控制台的log：Using CATALINA_BASE:   "C:\Users\TEDU\.IntelliJIdea2019.2\system\tomcat\_JavaWeb"  
+
 2.工作空间项目和Tomcat部署的web项目
   * Tomcat真正访问的是“Tomcat部署的web项目”，“Tomcat部署的web项目”对应着“工作空间项目”的web目录下所有资源  
   * WEB-INF目录下的资源不能被浏览器直接访问  
+
 3.断点调试：添加断点，然后debug启动
 
 
