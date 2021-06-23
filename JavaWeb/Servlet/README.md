@@ -52,7 +52,14 @@ servlet中的生命周期
 4.public ServletConfig getServletConfig()：获取ServletConfig对象，ServletConfig对象是servlet的配置对象  
 5.public String getServletInfo()：获取servlet的一些信息，如：版本，作者等  
 
-
+servlet3.0
+  * 好处：支持注解配置，可以不需要web.xml。
+  * 步骤
+    * 1.创建javaEE项目，选择servlet的版本3.0以上，可以不需要web.xml
+    * 2.定义一个类，实现servlet接口
+    * 3.复写方法
+    * 4.在类上使用@WebServlet注解，进行配置
+      * @WebServlet("资源路径")
 
 
 
