@@ -181,8 +181,19 @@ HttpServlet：对http协议的一种封装，简化操作
           * BufferedReader getReader()：获取字符输入流，只能操作字符数据
           * ServletInputStream getInputStream()：获取自己输入流，可以操作所有类型数据 
         * 2.从流对象中拿数据
-      
-  * 其他功能
+   * 其他功能
+     * 1.获取请求参数通用方式：不论是get还是post方法请求方式都可以使用下列方法来获取请求参数
+       * String getParameter(String name)：根据参数名称获取参数值，如：username=zs&password=123
+       * String[] getParameterValues(String name)：根据参数名称获取参数值的数组，如：hobby=study&hobby=game，同样的参数名称有多个值，用数组存储
+       * Enumeration<String> getParameterNames()：获取所有请求的参数名称
+       * Map<String,String[]> getParameterMap()：获取所有参数的map集合
+       * 中文乱码问题
+         * get方式：Tomcat8已经将get方式乱码问题解决了
+         * post方式：会存在乱码，可以在获取参数前，设置request的编码，request.setCharacterEncoding("utf-8");
+ 
+     * 2.请求转发
+     * 3.共享数据
+     * 4.获取ServletContext
  
 
 
