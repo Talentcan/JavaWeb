@@ -181,6 +181,7 @@ HttpServlet：对http协议的一种封装，简化操作
           * BufferedReader getReader()：获取字符输入流，只能操作字符数据
           * ServletInputStream getInputStream()：获取自己输入流，可以操作所有类型数据 
         * 2.从流对象中拿数据
+   
    * 其他功能
      * 1.获取请求参数通用方式：不论是get还是post方法请求方式都可以使用下列方法来获取请求参数
        * String getParameter(String name)：根据参数名称获取参数值，如：username=zs&password=123
@@ -197,11 +198,41 @@ HttpServlet：对http协议的一种封装，简化操作
          * 使用RequestDispatcher对象来进行转发：forward(ServletRequest requset, ServletResponse response)
        * 特点
          * 浏览器地址栏路径不发生变化
+         * 只能转发到当前服务器内部的资源中，在同一个Tomcat中
+         * 转发虽然访问多个资源，但只是发送一次请求
      * 3.共享数据
+       * 域对象：一个有作用范围的对象，可以在范围内共享数据
+       * request域：代表一次请求的范围，一般用于请求转发的多个资源中共享数据
+       * 方法
+         * void setAttribute(String name, Object obj)：存储数据
+         * Object getAttribute(String name)：通过键来获取值
+         * void removeAttribute(String name)：通过键移除键值对
      * 4.获取ServletContext
+       * ServletContext getServletContext()
+
+```
+案例：
+用户登录案例需求：
+1.编写login.html登录页面
+	username & password 两个输入框
+2.使用Druid数据库连接池技术,操作mysql，数据库中user表
+3.使用JdbcTemplate技术封装JDBC
+4.登录成功跳转到SuccessServlet展示：登录成功！用户名,欢迎您
+5.登录失败跳转到FailServlet展示：登录失败，用户名或密码错误
+分析
+
+步骤
+1.创建项目，导入HTML页面，配置文件，jar包
+2.创建数据库的环境
+create table USER(
+		id  int PRIMARY KEY AUTO_INCREMENT ,
+		username  varchar(32) UNIQUE NOT NULL ,
+		password  varchar(32) NOT NULL
+)
+3.创建包cn.web.domain，并创建一个user的实体类
+4.优先操作数据库，创建包cn.web.dao，创建一个UserDao类，提供Login的方法
  
-
-
+```
 
 
 
