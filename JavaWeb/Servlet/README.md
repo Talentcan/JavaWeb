@@ -140,12 +140,50 @@ HttpServlet：对http协议的一种封装，简化操作
 
 
 ## Request
-1.request对象和response对象的原理
-  * request对象和response对象是由服务器创建的，我们只是来使用它们
-  * request对象是来获取请求消息，response对象是来设置响应消息
-2.
+1.request对象和response对象的原理  
+  * request对象和response对象是由服务器创建的，我们只是来使用它们  
+  * request对象是来获取请求消息，response对象是来设置响应消息  
+2.request对象继承体系结构
+  * ServletRequest  -- 接口
+  *       | 继承
+  * HttpServletRequest  -- 接口
+  *       | 实现
+  * org.apache.catalina.connector.RequestFacade 类(Tomcat)
 
-
+3. request
+  * 获取请求消息数据
+    * 获取请求行数据
+      * GET /login.html HTTP/1.1
+      * 方法
+        * 1.获取请求方式：GET
+          * String getMethod()
+        * 获取虚拟目录（√）
+          * String getContextPath()
+        * 获取servlet路径
+          * String getServletPath()
+        * 获取get方式的请求参数
+          * String getQueryString()
+        * 获取请求的URI（√）
+          * String getRequestURI()：/demo1
+          * StringBuffer getRequestURL()：http://localhost/demo1
+        * 获取协议和版本
+          * String getProtocol()
+        * 获取客户机的IP地址
+          * String getRemoteAddr()
+    * 获取请求头数据
+      * 方法
+        * String getHeader(String name)：通过请求头的名称获取请求头的值  
+        * Enumeration<String> getHeaderNames()：获取所有的请求头名称  
+    * 获取请求体
+      * 请求体：只有POST请求方式，才有请求体，在请求体中封装了POST请求的请求参数
+      * 步骤
+        * 1.获取流对象
+          * BufferedReader getReader()：获取字符输入流，只能操作字符数据
+          * ServletInputStream getInputStream()：获取自己输入流，可以操作所有类型数据 
+        * 2.从流对象中拿数据
+      
+  * 其他功能
+ 
 
 
 
