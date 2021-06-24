@@ -191,7 +191,12 @@ HttpServlet：对http协议的一种封装，简化操作
          * get方式：Tomcat8已经将get方式乱码问题解决了
          * post方式：会存在乱码，可以在获取参数前，设置request的编码，request.setCharacterEncoding("utf-8");
  
-     * 2.请求转发
+     * 2.请求转发:一种在服务器内部的资源跳转方式
+       * 步骤
+         * 通过request对象获取请求装发器对象：RequestDispatcher getRequestDispatcher(String path)
+         * 使用RequestDispatcher对象来进行转发：forward(ServletRequest requset, ServletResponse response)
+       * 特点
+         * 浏览器地址栏路径不发生变化
      * 3.共享数据
      * 4.获取ServletContext
  
