@@ -413,6 +413,22 @@ public class successServlet extends HttpServlet {
         this.doPost(request,response);
     }
 }
+
+在获取用户请求参数和封装对象的过程中，如果消息条数过多，一条条获取和一条条封装太麻烦，可以进行简化
+可以创建一个工具类来简化数据的封装
+导入commons-beanutils-1.8.0.jar这个jar包，就可以调用里面的方法
+//获取所有的请求参数
+Map<String, String[]> map = request.getParameterMap();
+//创建user对象
+User loginuser = new User();
+//使用BeanUtils封装，可以封装所有的数据
+try {
+    BeanUtils.populate(loginuser,map);
+} catch (IllegalAccessException e) {
+    e.printStackTrace();
+} catch (InvocationTargetException e) {
+    e.printStackTrace();
+}
 ```
 
 
