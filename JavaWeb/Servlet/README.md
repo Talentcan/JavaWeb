@@ -430,11 +430,27 @@ try {
     e.printStackTrace();
 }
 ```
-
-
-
-
-
+	
+## BeanUtils工具类：简化数据封装
+用于封装javaBean的，操作JavaBean
+  * javaBean：标准的java类，必须遵守一些规则
+    * 1.要求
+      * 1.类必须被public修饰
+      * 必须提供空参的构造器
+      * 成员变量必须使用private修饰
+      * 提供公共setter和getter方法
+    * 功能：封装数据
+  * 2.概念
+    * 成员变量
+    * 属性：setter和getter方法截取后的产物
+      * 例如：getUsername()先截取为Username，再将首字母变成小写username，属性一般和成员变量一样，不过也可以不一样，
+      * 例如：setTalentcan(String username){this username = username}，截取后属性为talentcan，和成员变量不同，但是它是来操作username这个成员变量的
+  * 3.方法：操作的是属性而不是成员变量
+    * setProperty()：设置属性值
+      * BeanUtils.setProperty(Object bean, String name, Object value)：BeanUtils.setProperty(user,"username","zs");
+      * BeanUtils.getProperty(Object bean, String name)：BeanUtils.getProperty(user, "username");
+    * getProperty()：获取属性值
+    * populate(Object bean, Map map)（√）：将map集合的键值对信息，封装到对应的JavaBean对象中
 
 
 
