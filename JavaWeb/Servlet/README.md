@@ -210,7 +210,7 @@ HttpServlet：对http协议的一种封装，简化操作
      * 4.获取ServletContext
        * ServletContext getServletContext()
 
-```
+```ruby
 案例：
 用户登录案例需求：
 1.编写login.html登录页面
