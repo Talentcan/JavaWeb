@@ -178,8 +178,8 @@ HttpServlet：对http协议的一种封装，简化操作
       * 请求体：只有POST请求方式，才有请求体，在请求体中封装了POST请求的请求参数
       * 步骤
         * 1.获取流对象
-          * BufferedReader getReader()：获取字符输入流，只能操作字符数据
-          * ServletInputStream getInputStream()：获取自己输入流，可以操作所有类型数据 
+          * BufferedReader getReader()：获取字符输入流，只能操作字符数据，字符流是用来操作文本的，字节流可以操作所有数据类型
+          * ServletInputStream getInputStream()：获取字节输入流，可以操作所有类型数据 
         * 2.从流对象中拿数据
    
    * 其他功能
@@ -223,6 +223,18 @@ HttpServlet：对http协议的一种封装，简化操作
 
 步骤
 1.创建项目，导入HTML页面，配置文件，jar包
+//login.html
+<body>
+<form action="/" method="get">
+    用户名：<input type="text" name="username"><br>
+    密码：<input type="password" name="password"><br>
+    <input type="submit" value="登录">
+</form>
+</body>
+注意
+login.html中form表单action路径的写法：虚拟路径+servlet的资源路径，如虚拟路径自己起名为"/servlet_test"，资源路径为"/loginServlet"
+	
+	
 2.创建数据库的环境
 create table USER(
 		id  int PRIMARY KEY AUTO_INCREMENT ,
@@ -230,8 +242,177 @@ create table USER(
 		password  varchar(32) NOT NULL
 )
 3.创建包cn.web.domain，并创建一个user的实体类
+//用户的实体类
+public class User {
+    private int id;
+    private String username;
+    private String password;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+}
 4.优先操作数据库，创建包cn.web.dao，创建一个UserDao类，提供Login的方法
- 
+public class JDBCUtils {
+    private static DataSource ds;
+    static {
+        try {
+            //加载配置文件
+            Properties pro = new Properties();
+            //使用ClassLoader加载文件、获取字节输入流
+            InputStream resourceAsStream = JDBCUtils.class.getClassLoader().getResourceAsStream("druid.properties");
+            pro.load(resourceAsStream);
+            //初始化连接池对象
+            ds = DruidDataSourceFactory.createDataSource(pro);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    /*
+    * 获取连接池对象
+    * */
+    public static DataSource getDataSource() {
+        return ds;
+    }
+    /*
+     * 获取连接connection对象
+     * */
+    public static Connection getConnection() throws SQLException {
+        return ds.getConnection();
+    }
+	
+//使用JdbcTemplate技术封装JDBC
+public class UserDao {
+    //声明JDBCTemplate对象共用
+    private JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
+    /**
+     * 登录方法
+     * LoginUser 只有用户名和密码
+     * return user包含用户的全部数据,没有查询到返回null
+     */
+    public User Login(User LoginUser){
+        try {
+            //编写sql代码
+            String sql = "select * from user where username = ? and password = ?";
+            //调用query方法
+            User user = template.queryForObject(sql,
+                    new BeanPropertyRowMapper<User>(User.class),
+                    LoginUser.getUsername(), LoginUser.getPassword());
+            return user;
+        } catch (DataAccessException e) {
+            e.printStackTrace();//记录日志
+            return null;
+        }
+    }
+}
+
+//编写测试类测试是否和数据库连接成功
+public class UserDaoTest {
+    @Test
+    public void testLogin(){
+        User loginuser = new User();
+        loginuser.setUsername("talentcan");
+        loginuser.setPassword("123");
+
+        UserDao dao = new UserDao();
+        User user = dao.Login(loginuser);
+        System.out.println(user);
+    }
+}
+5.编写cn.web.servlet.LoginServlet类，可以使用快捷生成servlet的方法
+在servlet中的步骤
+1.设置编码
+2.获取username和password
+3.将username和password封装为一个User对象
+4.调用Userdao的login方法查询，获取返回值User对象
+5.判断user是否为null，如果是null，登录失败，跳转到failServlet；如果不是null，登录成功，将用户信息存起来request域转发successServlet
+@WebServlet("/loginServlet")
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //设置编码
+        request.setCharacterEncoding("utf-8");
+        //获取请求参数
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        //封装user对象
+        User loginuser = new User();
+        loginuser.setUsername(username);
+        loginuser.setPassword(password);
+        //调用UserDao的login方法
+        UserDao dao = new UserDao();
+        User user = dao.Login(loginuser);
+        //判断user
+        if (user == null){
+            //登录失败
+            request.getRequestDispatcher("failServlet").forward(request,response);
+        }else{
+            //登录成功并存储数据
+            request.setAttribute("user",user);
+            //转发
+            request.getRequestDispatcher("successServlet").forward(request,response);
+        }
+    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request,response);
+    }
+}
+
+@WebServlet("/failServlet")
+public class failServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //给页面输出一句话
+        //设置编码
+        response.setContentType("text/html;charset=utf-8");
+        //输出
+        response.getWriter().write("登录失败，用户名或密码错误");
+    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request,response);
+    }
+}
+	
+@WebServlet("/successServlet")
+public class successServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //给页面输出一句话
+        //设置编码
+        response.setContentType("text/html;charset=utf-8");
+        //获取request域中共享的user对象
+        User user = (User) request.getAttribute("user");
+        //输出
+        if (user != null) {
+            response.getWriter().write("登录成功！" + user.getUsername() + "欢迎你");
+        }
+    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request,response);
+    }
+}
 ```
 
 
