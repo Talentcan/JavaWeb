@@ -446,7 +446,7 @@ try {
       * 例如：getUsername()先截取为Username，再将首字母变成小写username，属性一般和成员变量一样，不过也可以不一样，
       * 例如：setTalentcan(String username){this username = username}，截取后属性为talentcan，和成员变量不同，但是它是来操作username这个成员变量的
   * 3.方法：操作的是属性而不是成员变量
-    * setProperty()：设置属性值
+    * setProperty()：设置属性值，name中的值为属性值
       * BeanUtils.setProperty(Object bean, String name, Object value)：BeanUtils.setProperty(user,"username","zs");
       * BeanUtils.getProperty(Object bean, String name)：BeanUtils.getProperty(user, "username");
     * getProperty()：获取属性值
