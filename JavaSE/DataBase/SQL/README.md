@@ -294,14 +294,14 @@ SELECT * from stu LIMIT 2,2; -- 第2页，第一个2表示从第二条数据开�
     - 在创建表时，添加主键约束并完成自动增长
     ```
     create table stu(
-      id int primary key auto-increment, -- 给id添加主键约束,并实现自动增长
+      id int primary key auto_increment, -- 给id添加主键约束,并实现自动增长
       name varchar(20);
     );
     -- 假如表中有(1,a),现在添加数据(null,b),在表中成为(1,a)(2,b),再添加(5,c),表中数据(1,a)(2,b)(5,c),此时再添加数据(null,d)，数据变成(1,a)(2,b)(5,c)(6,d),说明自动增长的值只与前一个数据有关
     ```
     - 表创建好后，添加自动增长
     ```
-    alter table stu modify id int primary key auto-increment;
+    alter table stu modify id int primary key auto_increment;
     ```
     - 删除自动增长
     ```
